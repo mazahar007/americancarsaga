@@ -4,11 +4,10 @@ backend:
   name: github
   repo: mazahar007/americancarsaga
   branch: main
-  # If you host on Netlify, keep this. Otherwise see README.
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
-  # Your Netlify site address (keeps login working after you add a custom domain)
-  site_domain: americancarsaga.netlify.app
+  # Login runs through /api/auth.php on your own hosting.
+  # Change this to your real domain (same as SITE.url in src/config.ts).
+  base_url: https://www.americancarsaga.com
+  auth_endpoint: api/auth.php
 
 # Lets you test locally with `npm run cms` + `npm run dev`
 local_backend: true
