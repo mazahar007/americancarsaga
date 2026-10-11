@@ -25,6 +25,7 @@ const id = youtubeId(url);
   document.querySelectorAll('.yt[data-id]').forEach(function (el) {
     if (el.dataset.bound) return; el.dataset.bound = '1';
     el.querySelector('.yt-play').addEventListener('click', function () {
+      window.acsTrack && acsTrack('video_play', { video_provider: 'youtube', video_id: el.dataset.id, video_title: el.dataset.title });
       var f = document.createElement('iframe');
       f.src = 'https://www.youtube-nocookie.com/embed/' + el.dataset.id + '?autoplay=1&rel=0';
       f.title = el.dataset.title || 'YouTube video';

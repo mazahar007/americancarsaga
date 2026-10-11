@@ -8,7 +8,7 @@ import { SITE } from '../config';
       <p>One friendly email a week: new stories, honest reviews and the best deals for classic car owners. No spam, unsubscribe anytime.</p>
     </div>
     {SITE.newsletterAction ? (
-      <form action={SITE.newsletterAction} method="post" target="_blank" class="nl-form">
+      <form action={SITE.newsletterAction} method="post" target="_blank" class="nl-form" onsubmit="window.acsTrack && acsTrack('sign_up', { method: 'newsletter' })">
         <label for="nl-email" class="visually-hidden">Email address</label>
         <input id="nl-email" type="email" name="email" required placeholder="Your email address" autocomplete="email" />
         <button class="btn btn-accent" type="submit">Subscribe</button>

@@ -28,6 +28,8 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
         var hay = (a.t + ' ' + a.d + ' ' + a.c + ' ' + a.k).toLowerCase();
         return words.every(function (w) { return hay.indexOf(w) !== -1; });
       });
+      clearTimeout(window.__acsSearchT);
+      window.__acsSearchT = setTimeout(function () { window.acsTrack && acsTrack('search', { search_term: q, results: hits.length }); }, 1200);
       status.textContent = hits.length + (hits.length === 1 ? ' result' : ' results') + ' for “' + input.value.trim() + '”';
       list.innerHTML = hits.map(function (a) {
         return '<li><span class="kicker">' + esc(a.c) + '</span><h2><a href="' + a.u + '">' + esc(a.t) + '</a></h2><p>' + esc(a.d) + '</p></li>';

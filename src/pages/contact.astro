@@ -5,7 +5,7 @@ import { SITE } from '../config';
 <PageLayout title="Contact Us" description={`Contact ${SITE.name}`} intro="Questions, corrections, story ideas or partnership requests — we read every message.">
   <p>Email us directly at <a href={`mailto:${SITE.email}`}>{SITE.email}</a>, or use the form below.</p>
   <p id="form-error" class="form-error" hidden>Sorry, your message could not be sent. Please check the fields or email us directly.</p>
-  <form name="contact" method="POST" action="/api/contact.php" class="contact-form">
+  <form name="contact" method="POST" action="/api/contact.php" class="contact-form" onsubmit="window.acsTrack && acsTrack('generate_lead', { form: 'contact', topic: this.topic.value })">
     <p class="visually-hidden"><label>Leave empty <input name="company" /></label></p>
     <div><label for="name">Your name</label><input id="name" name="name" required autocomplete="name" /></div>
     <div><label for="email">Your email</label><input id="email" type="email" name="email" required autocomplete="email" /></div>

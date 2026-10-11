@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { SITE } from '../config';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
 
 interface Props {
   title?: string;
@@ -12,8 +13,11 @@ interface Props {
   publishedTime?: Date;
   noindex?: boolean;
   jsonLd?: Record<string, unknown>;
+  /** Analytics grouping, e.g. the article category */
+  contentGroup?: string;
+  pageType?: string;
 }
-const { title, description = SITE.description, image, type = 'website', publishedTime, noindex = false, jsonLd } = Astro.props;
+const { title, description = SITE.description, image, type = 'website', publishedTime, noindex = false, jsonLd, contentGroup, pageType } = Astro.props;
 const fullTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image ?? '/og-default.svg', Astro.site);
@@ -52,6 +56,10 @@ const ogImage = new URL(image ?? '/og-default.svg', Astro.site);
         var t = localStorage.getItem('acs-theme'); if (t) d.dataset.theme = t;
       } catch (e) {}
     </script>
+
+    {SITE.analytics.googleSiteVerification && <meta name="google-site-verification" content={SITE.analytics.googleSiteVerification} />}
+    {SITE.analytics.bingSiteVerification && <meta name="msvalidate.01" content={SITE.analytics.bingSiteVerification} />}
+    <Analytics contentGroup={contentGroup} pageType={pageType ?? type} />
 
     {SITE.adsenseClient && (
       <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.adsenseClient}`} crossorigin="anonymous"></script>

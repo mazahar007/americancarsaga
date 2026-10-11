@@ -8,7 +8,7 @@ const { data } = Astro.props.video;
 ---
 {data.type === 'upload' ? (
   data.videoFile ? (
-    <video class="native" controls preload="none" playsinline poster={data.poster}>
+    <video class="native" controls preload="none" playsinline poster={data.poster} data-title={data.title} onplay="window.acsTrack && acsTrack('video_play', { video_provider: 'self_hosted', video_title: this.dataset.title })">
       <source src={data.videoFile} type="video/mp4" />
       Your browser does not support HTML video.
     </video>

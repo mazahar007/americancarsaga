@@ -52,6 +52,38 @@ npm run build    # পুরো সাইট তৈরি হবে dist/ ফো
 3. ক্লায়েন্ট আইডি না দেওয়া পর্যন্ত বিজ্ঞাপনের জায়গায় হালকা "Ad space" লেখা দেখা যাবে। এটা বন্ধ করতে `showAdPlaceholders: false` করুন।
 4. এফিলিয়েট লিংকে স্বয়ংক্রিয়ভাবে `rel="sponsored nofollow"` যোগ হয়, আর ডিসক্লোজার দেখায়।
 
+## ট্রাফিক ট্র্যাকিং
+সব সেটিং `src/config.ts`-এর `analytics` অংশে। কোনো আইডি না দিলে কিছুই লোড হয় না, তাই সাইট হালকা থাকে।
+
+| টুল | কী দেখায় | কোথায় পাবেন | কোন ঘরে বসাবেন |
+|---|---|---|---|
+| **Google Analytics 4** | কতজন এল, কোথা থেকে এল (Google, Facebook, YouTube), কোন দেশ, কোন ডিভাইস, কোন আর্টিকেল বেশি পড়া হয় | analytics.google.com → Admin → Data streams → Web | `ga4Id: 'G-XXXXXXX'` |
+| **Google Search Console** | গুগলে কোন সার্চ থেকে লোক আসছে, কোন পেজ ইনডেক্স হয়েছে | search.google.com/search-console → HTML tag পদ্ধতি | `googleSiteVerification` |
+| **Bing Webmaster Tools** | Bing আর Yahoo থেকে আসা ট্রাফিক | bing.com/webmasters | `bingSiteVerification` |
+| **Microsoft Clarity** (ফ্রি) | হিটম্যাপ আর ভিডিও রেকর্ডিং: পাঠক কোথায় ক্লিক করছে, কোথায় আটকে যাচ্ছে | clarity.microsoft.com | `clarityId` |
+
+Search Console আর Bing-এ নিজের সাইট যুক্ত করার পর সেখানে sitemap হিসেবে `https://আপনার-ডোমেইন/sitemap-index.xml` জমা দিন।
+
+### আলাদাভাবে যা ট্র্যাক হয় (GA4 → Reports → Engagement → Events)
+| ইভেন্ট | মানে |
+|---|---|
+| `affiliate_click` | কোন প্রোডাক্টের "Check Price" বাটনে ক্লিক হয়েছে, লিস্টের কত নম্বরে ছিল, কোন আর্টিকেল থেকে। **আয়ের জন্য সবচেয়ে জরুরি তথ্য** |
+| `article_read` | পাঠক আর্টিকেলের কতটা পড়েছে: ২৫%, ৫০%, ৭৫% বা ১০০% |
+| `video_play` | কোন ভিডিও প্লে হয়েছে |
+| `share` | কোন মাধ্যমে আর্টিকেল শেয়ার হয়েছে: Facebook, X, Pinterest, Email বা Print |
+| `search` | সাইটের সার্চে মানুষ কী খুঁজছে। নতুন আর্টিকেলের আইডিয়া পাওয়ার ভালো উৎস |
+| `generate_lead` / `sign_up` | Contact ফর্ম জমা / নিউজলেটারে সাইন আপ |
+| `text_size_change` / `color_mode_change` | কতজন লেখা বড় করছেন বা Night mode চালু করছেন |
+| `page_not_found` | কোন ভাঙা লিংক থেকে মানুষ 404 পেজে আসছে |
+
+প্রতিটা পেজের সাথে ক্যাটাগরিও পাঠানো হয় (`content_group`)। তাই GA4-এ দেখা যাবে কোন ক্যাটাগরি (Reviews, Buying Guides ইত্যাদি) সবচেয়ে বেশি পড়া হয়।
+
+**রিপোর্টে কাস্টম তথ্য দেখার জন্য একবারের সেটআপ:**
+- GA4 → Admin → Custom definitions → Create custom dimension-এ গিয়ে `product_name`, `percent`, `search_term` যোগ করুন। তাহলে রিপোর্টে প্রোডাক্টের নাম, পড়ার শতাংশ আর সার্চের শব্দ আলাদা করে দেখা যাবে।
+- GA4 → Admin → Events-এ `affiliate_click`-কে **Key event** হিসেবে চিহ্নিত করুন।
+
+**ইউরোপের ভিজিটরদের জন্য:** এই এলাকার ভিজিটরদের জন্য কুকি ব্যবহারের অনুমতি নেওয়া আইনত জরুরি। AdSense চালু হলে AdSense → Privacy & messaging থেকে Google-এর নিজস্ব ফ্রি সম্মতি বার্তা (consent message) চালু করুন।
+
 ## নিজের হোস্টিংয়ে সাইট চালানো (cPanel)
 সাইটটা চলে সাধারণ HTML ফাইল দিয়ে। আলাদা করে লাগে শুধু দুটো ছোট PHP ফাইল: `api/auth.php` (অ্যাডমিন প্যানেলের লগইন) আর `api/contact.php` (Contact ফর্মের মেসেজ ইমেইলে পাঠানো)। তাই PHP চলে এমন যেকোনো সাধারণ হোস্টিংয়ে সাইট চলবে। কোনো ডাটাবেস লাগে না।
 

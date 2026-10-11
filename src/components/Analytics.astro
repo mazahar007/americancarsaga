@@ -1,0 +1,80 @@
+---
+// Traffic tracking: Google Analytics 4 + optional Microsoft Clarity.
+// Nothing loads until you add IDs in src/config.ts (SITE.analytics).
+import { SITE } from '../config';
+interface Props { contentGroup?: string; pageType?: string }
+const { contentGroup, pageType } = Astro.props;
+const { ga4Id, clarityId } = SITE.analytics;
+const pageInfo = { content_group: contentGroup ?? 'General', page_type: pageType ?? 'page' };
+---
+<script is:inline define:vars={{ ga4Id, clarityId, pageInfo }}>
+  // acsTrack(name, params) — safe to call from anywhere, even when analytics is off.
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function () { dataLayer.push(arguments); };
+  window.acsTrack = function (name, params) {
+    try {
+      if (ga4Id) gtag('event', name, params || {});
+      if (window.clarity) clarity('event', name);
+    } catch (e) {}
+  };
+
+  if (ga4Id) {
+    var s = document.createElement('script');
+    s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga4Id;
+    document.head.appendChild(s);
+    gtag('js', new Date());
+    var prefs = {};
+    try { prefs = { text_size: localStorage.getItem('acs-size') || 'normal', color_mode: localStorage.getItem('acs-theme') || 'light' }; } catch (e) {}
+    gtag('config', ga4Id, Object.assign({}, pageInfo, prefs));
+  }
+
+  if (clarityId) {
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+      t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', clarityId);
+  }
+
+  if (ga4Id || clarityId) {
+    if (pageInfo.page_type === '404') acsTrack('page_not_found', { page_path: location.pathname, referrer: document.referrer });
+
+    // One listener for every click on the page
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest && e.target.closest('a, button');
+      if (!el) return;
+      var rel = el.getAttribute('rel') || '';
+      if (el.dataset.product || rel.indexOf('sponsored') > -1) {
+        // Affiliate click — the most important event for earnings
+        acsTrack('affiliate_click', {
+          product_name: el.dataset.product || el.textContent.trim().slice(0, 100),
+          product_position: el.dataset.position ? Number(el.dataset.position) : undefined,
+          link_url: el.href, link_domain: el.hostname, article: location.pathname,
+        });
+      } else if (el.dataset.share) {
+        acsTrack('share', { method: el.dataset.share, content_type: pageInfo.page_type, item_id: location.pathname });
+      } else if (el.dataset.size !== undefined && el.closest('.reader-tools')) {
+        acsTrack('text_size_change', { size: el.dataset.size || 'normal' });
+      } else if (el.classList.contains('theme-toggle')) {
+        acsTrack('color_mode_change', { mode: document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark' });
+      } else if (el.matches('a[href^="mailto:"]')) {
+        acsTrack('email_click', { link_url: el.href });
+      }
+    }, true);
+
+    // How far readers get through an article (25/50/75/100%)
+    document.addEventListener('DOMContentLoaded', function () {
+    var article = document.querySelector('.prose');
+    if (article && pageInfo.page_type === 'article') {
+      var marks = [25, 50, 75, 100], sent = {};
+      var onScroll = function () {
+        var r = article.getBoundingClientRect();
+        var pct = Math.min(100, Math.max(0, ((innerHeight - r.top) / r.height) * 100));
+        marks.forEach(function (m) { if (pct >= m && !sent[m]) { sent[m] = 1; acsTrack('article_read', { percent: m, content_group: pageInfo.content_group }); } });
+        if (sent[100]) removeEventListener('scroll', onScroll);
+      };
+      addEventListener('scroll', onScroll, { passive: true });
+    }
+    });
+  }
+</script>

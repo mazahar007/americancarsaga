@@ -44,7 +44,7 @@ const jsonLd: Record<string, unknown> = {
     : {}),
 };
 ---
-<BaseLayout title={data.title} description={data.description} image={data.heroImage} type="article" publishedTime={data.pubDate} jsonLd={jsonLd}>
+<BaseLayout title={data.title} description={data.description} image={data.heroImage} type="article" publishedTime={data.pubDate} jsonLd={jsonLd} contentGroup={cat.short}>
   <div class="container">
     <Breadcrumbs items={[{ href: `/category/${cat.slug}`, label: cat.name }, { label: data.title }]} />
     <div class="layout">

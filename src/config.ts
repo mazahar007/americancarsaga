@@ -15,6 +15,17 @@ export const SITE = {
   email: 'hello@americancarsaga.com',
   locale: 'en_US',
 
+  // ---------- Traffic tracking ----------
+  analytics: {
+    // Google Analytics 4 Measurement ID, e.g. 'G-ABC123XYZ'. Empty = off.
+    ga4Id: '',
+    // Microsoft Clarity project ID (free heatmaps & session recordings). Empty = off.
+    clarityId: '',
+    // Search engine verification codes (only the content="..." value).
+    googleSiteVerification: '',
+    bingSiteVerification: '',
+  },
+
   // ---------- Google AdSense ----------
   // Paste your publisher ID, e.g. 'ca-pub-1234567890123456'.
   // While empty, light "Advertisement" placeholders show where ads will appear.
