@@ -35,9 +35,9 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: SIT
       <h2 class="visually-hidden">Browse by topic</h2>
       <ul class="topics">
         {CATEGORIES.map((c) => (
-          <li><a href={`/category/${c.slug}`}><span class="t-icon" aria-hidden="true">{c.icon}</span><span>{c.name}</span></a></li>
+          <li><a href={`/category/${c.slug}`}><span class="t-icon" aria-hidden="true">{c.icon}</span><span class="t-label">{c.short}</span></a></li>
         ))}
-        <li><a href="/videos"><span class="t-icon" aria-hidden="true">▶</span><span>Videos</span></a></li>
+        <li><a href="/videos"><span class="t-icon" aria-hidden="true">▶</span><span class="t-label">Videos</span></a></li>
       </ul>
     </div>
   </section>
@@ -91,12 +91,14 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: SIT
   .hero-side { display: flex; flex-direction: column; gap: .9rem; }
   .side-title { margin: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: .1em; font-family: var(--font-body); border-bottom: 2px solid var(--text); padding-bottom: .4rem; }
   .hero-side .btn { align-self: flex-start; }
-  .topics { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: .8rem; }
+  .topics { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 11.5rem), 1fr)); gap: .8rem; }
   .topics a { display: flex; align-items: center; gap: .7rem; min-height: 64px; padding: .7rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); text-decoration: none; font-weight: 600; }
+  .t-label { min-width: 0; line-height: 1.25; }
   .topics a:hover { border-color: var(--accent); color: var(--accent); }
-  .t-icon { flex: 0 0 2.2rem; height: 2.2rem; border-radius: 50%; display: grid; place-items: center; background: var(--primary); color: var(--on-primary); font-size: .95rem; }
+  .t-icon { flex: 0 0 2.2rem; width: 2.2rem; height: 2.2rem; border-radius: 50%; display: grid; place-items: center; background: var(--primary); color: var(--on-primary); font-size: .95rem; }
   .partner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); padding: clamp(1.4rem, 4vw, 2.4rem); }
   .partner h2 { margin: .3rem 0 .4rem; }
   .partner p { margin: 0; color: var(--muted); max-width: 40rem; }
   @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { .topics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .topics a { flex-direction: column; justify-content: center; text-align: center; padding: .8rem .5rem; gap: .45rem; } }
 </style>
