@@ -1,4 +1,6 @@
 ---
+heroImage: /images/demo/mustang-classic.jpg
+heroAlt: "A red classic convertible on a country road"
 title: "Buying a 1965–1966 Ford Mustang: Honest Pros and Cons"
 description: "Thinking about an early Mustang? Here is the straight talk on what is wonderful, what is frustrating and what it really costs."
 category: pros-cons

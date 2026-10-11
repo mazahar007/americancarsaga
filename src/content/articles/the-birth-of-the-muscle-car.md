@@ -1,4 +1,6 @@
 ---
+heroImage: /images/demo/muscle-history.jpg
+heroAlt: "A classic convertible on Route 66 at sunset"
 title: "The Birth of the Muscle Car: How a Rule-Breaking Idea Changed Detroit"
 description: "The true story of the young engineers and marketers who built the Pontiac GTO against company policy — and started an American legend."
 category: stories

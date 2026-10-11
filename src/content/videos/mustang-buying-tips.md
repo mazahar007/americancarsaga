@@ -1,4 +1,5 @@
 ---
+poster: /images/demo/mustang-classic.jpg
 title: "5 Things to Check Before Buying an Early Mustang"
 description: "Rust traps, numbers and paperwork: our quick checklist for 1965–1966 Mustang shoppers."
 pubDate: 2026-10-02

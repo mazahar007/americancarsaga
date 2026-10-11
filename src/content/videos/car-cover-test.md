@@ -1,4 +1,5 @@
 ---
+poster: /images/demo/car-cover.jpg
 title: "Indoor vs. Outdoor Car Covers: What Really Works?"
 description: "We compare cover types and show how to put one on without scratching your paint."
 pubDate: 2026-09-28

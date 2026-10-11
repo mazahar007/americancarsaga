@@ -1,4 +1,6 @@
 ---
+heroImage: /images/demo/car-cover.jpg
+heroAlt: "A classic car under a fitted cover in a garage"
 title: "Best Car Covers for Classic Cars: Our Buying Guide"
 description: "Indoor or outdoor, soft or tough — how to choose the right cover to protect your classic’s paint, plus our top picks."
 category: buying-guides

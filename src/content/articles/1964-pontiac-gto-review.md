@@ -1,4 +1,6 @@
 ---
+heroImage: /images/demo/gto-1964.jpg
+heroAlt: "A red 1964 Pontiac GTO at sunset in the desert"
 title: "1964 Pontiac GTO Review: The Car That Started the Muscle Era"
 description: "We look back at the original Pontiac GTO — how it drives, what it costs to own today, and whether it deserves its legendary status."
 category: reviews

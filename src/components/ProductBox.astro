@@ -16,7 +16,7 @@ const { products } = Astro.props;
           </div>
           <div class="p-body">
             {p.badge && <span class="badge">{p.badge}</span>}
-            <h3><span class="rank">{i + 1}.</span> {p.name}</h3>
+            <h3><span class="rank">{i + 1}.</span>&nbsp;{p.name}</h3>
             {p.description && <p>{p.description}</p>}
             <a class="btn btn-accent" href={p.url} rel="sponsored nofollow noopener" target="_blank">{p.buttonText} →</a>
           </div>

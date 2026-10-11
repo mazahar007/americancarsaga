@@ -1,4 +1,5 @@
 ---
+poster: /images/demo/barn-find.jpg
 title: "Barn Find to Show Car — Original Series"
 description: "Our first original, self-hosted video series follows a forgotten classic from barn to show field."
 pubDate: 2026-10-10

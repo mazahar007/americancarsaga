@@ -131,6 +131,6 @@ const jsonLd: Record<string, unknown> = {
   .side-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; display: flex; flex-direction: column; gap: .8rem; }
   .side-box h2 { margin: 0; font: 700 .8rem/1 var(--font-body); text-transform: uppercase; letter-spacing: .12em; color: var(--accent); }
   .side-btn { width: 100%; }
-  @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } .sidebar { position: static; } .post { max-width: none; } }
+  @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } .sidebar { position: static; } .sidebar :global(.ad) { display: none; } .post { max-width: none; } }
   @media print { .sidebar, :global(.site-header), :global(.site-footer), :global(.ad), .section-alt { display: none !important; } }
 </style>

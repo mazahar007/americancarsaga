@@ -1,4 +1,5 @@
 ---
+poster: /images/demo/gto-1964.jpg
 title: "1964 Pontiac GTO Walk-Around"
 description: "A close look at the original muscle car — engine bay, interior and the details that make a real GTO."
 pubDate: 2026-10-08

@@ -1,4 +1,6 @@
 ---
+heroImage: /images/demo/car-value.jpg
+heroAlt: "A gold classic car under an auction spotlight"
 title: "How to Check a Classic Car’s Value (Step by Step)"
 description: "Before you buy, sell or insure, learn how to find a fair value for any classic car using condition ratings, valuation tools and real sales."
 category: guides

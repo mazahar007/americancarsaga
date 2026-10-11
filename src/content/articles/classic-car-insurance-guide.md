@@ -1,4 +1,6 @@
 ---
+heroImage: /images/demo/insurance.jpg
+heroAlt: "A blue classic sedan parked in a home garage"
 title: "Classic Car Insurance Explained: Agreed Value vs. Stated Value"
 description: "Regular car insurance can leave classic owners badly underpaid after a loss. Here is how classic car insurance works and what to ask before you buy a policy."
 category: buying-guides

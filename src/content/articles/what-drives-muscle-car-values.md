@@ -1,4 +1,6 @@
 ---
+heroImage: /images/demo/muscle-market.jpg
+heroAlt: "A green muscle car on the auction stage"
 title: "What Drives Muscle Car Values? 6 Factors Every Owner Should Know"
 description: "Why do two cars that look the same sell for very different prices? A plain-English guide to the forces behind the classic muscle car market."
 category: market
