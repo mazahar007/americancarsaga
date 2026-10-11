@@ -1,0 +1,25 @@
+---
+// Renders either a YouTube embed or a self-hosted (uploaded) video.
+import type { Video } from '../lib/utils';
+import YouTube from './YouTube.astro';
+import CarImage from './CarImage.astro';
+interface Props { video: Video }
+const { data } = Astro.props.video;
+---
+{data.type === 'upload' ? (
+  data.videoFile ? (
+    <video class="native" controls preload="none" playsinline poster={data.poster}>
+      <source src={data.videoFile} type="video/mp4" />
+      Your browser does not support HTML video.
+    </video>
+  ) : (
+    <div class="upcoming"><CarImage alt={data.title} label={data.title} /><span>Direct video — coming soon</span></div>
+  )
+) : (
+  <YouTube url={data.youtubeUrl} title={data.title} />
+)}
+<style>
+  .native { width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: var(--radius); }
+  .upcoming { position: relative; }
+  .upcoming span { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,.65); color: #fff; padding: .5rem 1rem; border-radius: 99px; font-weight: 600; font-size: .9rem; white-space: nowrap; }
+</style>

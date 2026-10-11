@@ -1,0 +1,26 @@
+{
+  "name": "americancarsaga",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "American Car Saga — stories, reviews and buying advice for classic American car lovers.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "cms": "npx decap-server"
+  },
+  "engines": {
+    "node": ">=18.20.8"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^5.18.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^5.9.3"
+  }
+}

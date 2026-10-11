@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import VideoCard from '../../components/VideoCard.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getVideos } from '../../lib/utils';
+import { SITE } from '../../config';
+const videos = await getVideos();
+const youtube = videos.filter((v) => v.data.type === 'youtube');
+const uploads = videos.filter((v) => v.data.type === 'upload');
+---
+<BaseLayout title="Videos" description="Watch classic car reviews, road tests and stories from American Car Saga.">
+  <div class="cat-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Videos' }]} />
+      <h1>Car Saga Videos</h1>
+      <p>Road tests, walk-arounds and stories you can watch. Press play — videos load only when you click, so the page stays fast.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>From Our YouTube Channel</h2>
+        {SITE.social.youtube && <a href={SITE.social.youtube} target="_blank" rel="noopener">Subscribe on YouTube →</a>}
+      </div>
+      {youtube.length ? <div class="grid grid-4">{youtube.map((v) => <VideoCard video={v} />)}</div> : <p>Videos coming soon.</p>}
+    </div>
+  </section>
+
+  <div class="container"><AdSlot slot="inArticle" /></div>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>Original Videos <span class="soon">Coming Soon</span></h2>
+      </div>
+      <p class="lead">We are building our own video library hosted right here on American Car Saga — no YouTube needed. Full-length features, restorations and owner interviews are on the way.</p>
+      {uploads.length > 0 && <div class="grid grid-4">{uploads.map((v) => <VideoCard video={v} />)}</div>}
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .cat-hero { background: var(--surface-2); border-bottom: 1px solid var(--border); padding-bottom: 1.6rem; }
+  .cat-hero p { color: var(--muted); max-width: 44rem; margin: 0; font-size: 1.08rem; }
+  .soon { vertical-align: middle; font: 700 .7rem/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase; background: var(--gold); color: #fff; padding: .35em .6em; border-radius: 4px; margin-left: .4rem; }
+  .lead { max-width: 44rem; color: var(--muted); }
+</style>

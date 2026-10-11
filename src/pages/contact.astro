@@ -1,0 +1,24 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { SITE } from '../config';
+---
+<PageLayout title="Contact Us" description={`Contact ${SITE.name}`} intro="Questions, corrections, story ideas or partnership requests — we read every message.">
+  <p>Email us directly at <a href={`mailto:${SITE.email}`}>{SITE.email}</a>, or use the form below.</p>
+  <form name="contact" method="POST" data-netlify="true" netlify-honeypot="company" action="/thank-you" class="contact-form">
+    <input type="hidden" name="form-name" value="contact" />
+    <p class="visually-hidden"><label>Leave empty <input name="company" /></label></p>
+    <div><label for="name">Your name</label><input id="name" name="name" required autocomplete="name" /></div>
+    <div><label for="email">Your email</label><input id="email" type="email" name="email" required autocomplete="email" /></div>
+    <div>
+      <label for="topic">Topic</label>
+      <select id="topic" name="topic">
+        <option>General question</option><option>Story idea</option><option>Correction</option><option>Advertising / Brand partnership</option><option>Newsletter sign-up</option>
+      </select>
+    </div>
+    <div><label for="msg">Message</label><textarea id="msg" name="message" rows="6" required></textarea></div>
+    <button class="btn btn-primary" type="submit">Send message</button>
+  </form>
+</PageLayout>
+<style>
+  .contact-form { display: grid; gap: 1.1rem; max-width: 36rem; margin-top: 1.5rem; }
+</style>

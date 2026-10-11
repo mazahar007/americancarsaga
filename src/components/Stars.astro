@@ -1,0 +1,14 @@
+---
+interface Props { value: number; large?: boolean }
+const { value, large = false } = Astro.props;
+const pct = Math.max(0, Math.min(100, (value / 5) * 100));
+---
+<span class:list={['stars', { large }]} role="img" aria-label={`Rated ${value} out of 5`}>
+  <span class="base">★★★★★</span><span class="fill" style={`width:${pct}%`}>★★★★★</span>
+</span>
+<style>
+  .stars { position: relative; display: inline-block; line-height: 1; font-size: .95rem; letter-spacing: .05em; }
+  .stars.large { font-size: 1.5rem; }
+  .base { color: var(--border); }
+  .fill { position: absolute; inset: 0 auto 0 0; overflow: hidden; white-space: nowrap; color: var(--gold); }
+</style>

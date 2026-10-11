@@ -1,0 +1,19 @@
+---
+interface Props { url: string; title: string }
+const { url, title } = Astro.props;
+const u = encodeURIComponent(url), t = encodeURIComponent(title);
+---
+<div class="share" aria-label="Share this article">
+  <span>Share:</span>
+  <a href={`https://www.facebook.com/sharer/sharer.php?u=${u}`} target="_blank" rel="noopener">Facebook</a>
+  <a href={`https://twitter.com/intent/tweet?url=${u}&text=${t}`} target="_blank" rel="noopener">X</a>
+  <a href={`https://pinterest.com/pin/create/button/?url=${u}&description=${t}`} target="_blank" rel="noopener">Pinterest</a>
+  <a href={`mailto:?subject=${t}&body=${u}`}>Email</a>
+  <button type="button" onclick="window.print()">Print</button>
+</div>
+<style>
+  .share { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin: 1.5rem 0; font-size: .88rem; }
+  span { font-weight: 700; margin-right: .2rem; }
+  a, button { display: inline-flex; align-items: center; min-height: 40px; padding: 0 .85rem; border: 1px solid var(--border); border-radius: 99px; color: var(--text); background: var(--surface); text-decoration: none; font: 600 .85rem var(--font-body); cursor: pointer; }
+  a:hover, button:hover { border-color: var(--primary); color: var(--primary); }
+</style>

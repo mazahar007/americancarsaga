@@ -1,0 +1,40 @@
+---
+import Stars from './Stars.astro';
+interface Props { rating?: number; verdict?: string; specs?: { label: string; value: string }[] }
+const { rating, verdict, specs = [] } = Astro.props;
+---
+{typeof rating === 'number' && (
+<section class="rating" aria-label="Our verdict">
+  <div class="score">
+    <span class="num">{rating.toFixed(1)}</span><span class="of">/ 5</span>
+    <Stars value={rating} large />
+    <span class="lbl">Our Rating</span>
+  </div>
+  <div class="text">
+    <h3>The Verdict</h3>
+    {verdict && <p>{verdict}</p>}
+  </div>
+</section>
+)}
+{specs.length > 0 && (
+  <section class="specs" aria-label="Key specifications">
+    <h3>Key Specifications</h3>
+    <dl>{specs.map((s) => <div><dt>{s.label}</dt><dd>{s.value}</dd></div>)}</dl>
+  </section>
+)}
+<style>
+  .rating { display: flex; gap: 1.5rem; align-items: center; background: var(--surface-2); border-radius: var(--radius); padding: 1.3rem 1.5rem; margin: 2rem 0 1rem; border-left: 6px solid var(--gold); }
+  .score { display: flex; flex-direction: column; align-items: center; min-width: 7rem; }
+  .num { font: 700 2.6rem/1 var(--font-head); color: var(--primary); }
+  .of { color: var(--muted); font-size: .85rem; margin-bottom: .3rem; }
+  .lbl { font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: .35rem; }
+  .text h3 { margin: 0 0 .3rem; }
+  .text p { margin: 0; }
+  .specs { margin: 1rem 0 2rem; }
+  .specs h3 { margin: 0 0 .6rem; font-size: 1.1rem; }
+  dl { margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  dl div { padding: .7rem 1rem; border-bottom: 1px solid var(--border); background: var(--surface); }
+  dt { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  dd { margin: 0; font-weight: 600; }
+  @media (max-width: 520px) { .rating { flex-direction: column; text-align: center; } }
+</style>

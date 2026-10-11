@@ -1,0 +1,57 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import VideoPlayer from '../../components/VideoPlayer.astro';
+import VideoCard from '../../components/VideoCard.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
+import { getVideos, formatDate, youtubeId, type Video } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  const videos = await getVideos();
+  return videos.map((video) => ({ params: { slug: video.id }, props: { video, videos } }));
+}
+interface Props { video: Video; videos: Video[] }
+const { video, videos } = Astro.props;
+const { data } = video;
+const { Content } = await render(video);
+const others = videos.filter((v) => v.id !== video.id).slice(0, 4);
+const url = new URL(Astro.url.pathname, Astro.site).toString();
+const id = youtubeId(data.youtubeUrl);
+const jsonLd = {
+  '@context': 'https://schema.org', '@type': 'VideoObject', name: data.title, description: data.description,
+  uploadDate: data.pubDate.toISOString(),
+  ...(id ? { thumbnailUrl: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`, embedUrl: `https://www.youtube.com/embed/${id}` } : {}),
+  ...(data.videoFile ? { contentUrl: new URL(data.videoFile, Astro.site).toString() } : {}),
+};
+---
+<BaseLayout title={data.title} description={data.description} type="article" jsonLd={(id || data.videoFile) ? jsonLd : undefined}>
+  <div class="container narrow">
+    <Breadcrumbs items={[{ href: '/videos', label: 'Videos' }, { label: data.title }]} />
+    <h1>{data.title}</h1>
+    <p class="meta">{formatDate(data.pubDate)}{data.duration && ` · ${data.duration}`}</p>
+    <VideoPlayer video={video} />
+    <div class="prose desc">
+      <p class="dek">{data.description}</p>
+      <Content />
+      {data.relatedArticle && <p><a class="btn btn-primary" href={`/articles/${data.relatedArticle}`}>Read the full article →</a></p>}
+    </div>
+    <ShareButtons url={url} title={data.title} />
+    <AdSlot slot="inArticle" />
+  </div>
+  {others.length > 0 && (
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head"><h2>More Videos</h2><a href="/videos">All videos →</a></div>
+        <div class="grid grid-4">{others.map((v) => <VideoCard video={v} />)}</div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+<style>
+  .narrow { max-width: 1000px; }
+  .meta { color: var(--muted); font-size: .88rem; }
+  .desc { margin-top: 1.5rem; }
+  .dek { font-family: var(--font-head); font-size: 1.12rem; }
+</style>

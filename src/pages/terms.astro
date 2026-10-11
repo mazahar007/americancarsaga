@@ -1,0 +1,17 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { SITE } from '../config';
+---
+<PageLayout title="Terms of Use" description={`Terms of use for ${SITE.name}`}>
+  <p>By using {SITE.name} you agree to these terms.</p>
+  <h2>Content is for information only</h2>
+  <p>Articles, reviews, values and buying advice are provided for general information. Prices and values change; always verify details, inspect vehicles in person and consult qualified professionals before buying, insuring or repairing a vehicle.</p>
+  <h2>Copyright</h2>
+  <p>All original text, photos and videos are © {SITE.name} unless noted. You may share links and short quotes with credit; please do not republish full articles without permission.</p>
+  <h2>Third-party links</h2>
+  <p>We link to other websites and stores. We are not responsible for their content, products or policies.</p>
+  <h2>Limitation of liability</h2>
+  <p>{SITE.name} is provided “as is”. We are not liable for any loss arising from use of this site.</p>
+  <h2>Contact</h2>
+  <p><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+</PageLayout>

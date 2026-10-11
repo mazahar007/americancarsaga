@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Page not found" noindex>
+  <div class="container nf">
+    <p class="code">404</p>
+    <h1>This road seems to be closed</h1>
+    <p>The page you were looking for has moved or no longer exists. Let’s get you back on the highway.</p>
+    <p class="actions"><a class="btn btn-primary" href="/">Go to Home page</a> <a class="btn btn-ghost" href="/search">Search articles</a></p>
+  </div>
+</BaseLayout>
+<style>
+  .nf { text-align: center; padding: 4rem 1rem; max-width: 40rem; }
+  .code { font: 700 4rem/1 var(--font-head); color: var(--gold); margin: 0; }
+  .actions { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+</style>

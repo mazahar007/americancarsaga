@@ -1,0 +1,107 @@
+# Decap CMS — browser-based publishing panel at /admin
+# Setup steps are in README.md (section: "ব্রাউজার থেকে আর্টিকেল পাবলিশ").
+backend:
+  name: github
+  repo: mazahar007/americancarsaga
+  branch: main
+  # If you host on Netlify, keep this. Otherwise see README.
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+# Lets you test locally with `npm run cms` + `npm run dev`
+local_backend: true
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+publish_mode: editorial_workflow
+site_url: https://www.americancarsaga.com
+display_url: https://www.americancarsaga.com
+logo_url: /favicon.svg
+
+collections:
+  - name: articles
+    label: Articles
+    label_singular: Article
+    folder: src/content/articles
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}} — {{category}}"
+    sortable_fields: [pubDate, title, category]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: "Short description (SEO, 150–160 characters)", widget: text }
+      - name: category
+        label: Category
+        widget: select
+        options:
+          - { label: "Car Reviews", value: reviews }
+          - { label: "Stories & History", value: stories }
+          - { label: "Pros & Cons", value: pros-cons }
+          - { label: "Buying Guides", value: buying-guides }
+          - { label: "Tips & Know-How", value: guides }
+          - { label: "Values & Market", value: market }
+      - { name: pubDate, label: "Publish date", widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { name: updatedDate, label: "Updated date (optional)", widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, required: false }
+      - { name: author, label: Author, widget: string, default: "American Car Saga Team" }
+      - { name: heroImage, label: "Main image", widget: image, required: false }
+      - { name: heroAlt, label: "Image description (for accessibility)", widget: string, required: false }
+      - { name: tags, label: Tags, widget: list, default: [] }
+      - { name: featured, label: "Feature on homepage", widget: boolean, default: false }
+      - { name: draft, label: "Draft (hide from site)", widget: boolean, default: false }
+      - { name: sponsored, label: "Sponsored / brand promotion", widget: boolean, default: false }
+      - { name: sponsorName, label: "Sponsor name", widget: string, required: false }
+      - { name: youtubeUrl, label: "YouTube link (optional, shows video in article)", widget: string, required: false }
+      - { name: rating, label: "Rating 0–5 (reviews only)", widget: number, value_type: float, min: 0, max: 5, step: 0.5, required: false }
+      - { name: verdict, label: "Verdict (reviews only)", widget: text, required: false }
+      - { name: pros, label: Pros, widget: list, default: [] }
+      - { name: cons, label: Cons, widget: list, default: [] }
+      - name: specs
+        label: "Specifications"
+        widget: list
+        required: false
+        fields:
+          - { name: label, label: Label, widget: string }
+          - { name: value, label: Value, widget: string }
+      - name: products
+        label: "Affiliate products"
+        widget: list
+        required: false
+        fields:
+          - { name: name, label: "Product name", widget: string }
+          - { name: badge, label: "Badge (e.g. Best Overall)", widget: string, required: false }
+          - { name: description, label: Description, widget: text, required: false }
+          - { name: image, label: Image, widget: image, required: false }
+          - { name: url, label: "Affiliate link", widget: string }
+          - { name: buttonText, label: "Button text", widget: string, default: "Check Price" }
+      - { name: body, label: "Article text", widget: markdown }
+
+  - name: videos
+    label: Videos
+    label_singular: Video
+    folder: src/content/videos
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: Description, widget: text }
+      - { name: pubDate, label: "Publish date", widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - name: type
+        label: "Video type"
+        widget: select
+        default: youtube
+        options:
+          - { label: "YouTube link", value: youtube }
+          - { label: "Direct upload (coming soon)", value: upload }
+      - { name: youtubeUrl, label: "YouTube link", widget: string, required: false }
+      - { name: videoFile, label: "Video file (MP4) — direct upload", widget: file, required: false, media_folder: /public/videos, public_folder: /videos }
+      - { name: poster, label: "Thumbnail image", widget: image, required: false }
+      - { name: duration, label: "Duration (e.g. 12:40)", widget: string, required: false }
+      - name: category
+        label: Category
+        widget: select
+        required: false
+        options: [reviews, stories, pros-cons, buying-guides, guides, market]
+      - { name: relatedArticle, label: "Related article slug (optional)", widget: string, required: false }
+      - { name: featured, label: Featured, widget: boolean, default: false }
+      - { name: draft, label: Draft, widget: boolean, default: false }
+      - { name: body, label: "Notes / description", widget: markdown, required: false }

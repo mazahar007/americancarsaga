@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import VideoCard from '../components/VideoCard.astro';
+import AdSlot from '../components/AdSlot.astro';
+import Newsletter from '../components/Newsletter.astro';
+import { getArticles, getVideos } from '../lib/utils';
+import { SITE, CATEGORIES } from '../config';
+
+const articles = await getArticles();
+const videos = (await getVideos()).slice(0, 4);
+const featured = articles.find((a) => a.data.featured) ?? articles[0];
+const rest = articles.filter((a) => a !== featured);
+const topStories = rest.slice(0, 3);
+const byCat = (slug: string, n = 3) => articles.filter((a) => a.data.category === slug).slice(0, n);
+const rows = [
+  { slug: 'reviews', title: 'Latest Reviews' },
+  { slug: 'buying-guides', title: 'Buying Guides' },
+  { slug: 'stories', title: 'Stories & History' },
+];
+const jsonLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, potentialAction: { '@type': 'SearchAction', target: `${SITE.url}/search?q={query}`, 'query-input': 'required name=query' } };
+---
+<BaseLayout jsonLd={jsonLd}>
+  <section class="container hero">
+    {featured && <div class="hero-main"><ArticleCard article={featured} size="large" eager headingLevel="h2" /></div>}
+    <div class="hero-side">
+      <h2 class="side-title">Top Stories</h2>
+      {topStories.map((a) => <ArticleCard article={a} size="compact" />)}
+      <a class="btn btn-ghost" href="/category/stories">More stories →</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="visually-hidden">Browse by topic</h2>
+      <ul class="topics">
+        {CATEGORIES.map((c) => (
+          <li><a href={`/category/${c.slug}`}><span class="t-icon" aria-hidden="true">{c.icon}</span><span>{c.name}</span></a></li>
+        ))}
+        <li><a href="/videos"><span class="t-icon" aria-hidden="true">▶</span><span>Videos</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="container"><AdSlot slot="header" minHeight={100} /></div>
+
+  {rows.map((r, i) => {
+    const list = byCat(r.slug);
+    return list.length > 0 && (
+      <section class:list={['section', { 'section-alt': i % 2 === 0 }]}>
+        <div class="container">
+          <div class="section-head"><h2>{r.title}</h2><a href={`/category/${r.slug}`}>See all →</a></div>
+          <div class="grid grid-3">{list.map((a) => <ArticleCard article={a} />)}</div>
+        </div>
+      </section>
+    );
+  })}
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><h2>Watch: Car Saga Videos</h2><a href="/videos">All videos →</a></div>
+      <div class="grid grid-4">{videos.map((v) => <VideoCard video={v} />)}</div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head"><h2>Latest Articles</h2><a href="/search">Search all →</a></div>
+      <div class="grid grid-3">{rest.slice(0, 6).map((a) => <ArticleCard article={a} />)}</div>
+    </div>
+  </section>
+
+  <div class="container"><AdSlot slot="footer" minHeight={100} /></div>
+
+  <section class="section">
+    <div class="container partner">
+      <div>
+        <span class="kicker">For brands</span>
+        <h2>Reach passionate classic car owners</h2>
+        <p>Partner with {SITE.name} for sponsored reviews, product features and video placements, written for experienced, enthusiastic readers.</p>
+      </div>
+      <a class="btn btn-primary" href="/advertise">Advertise with us</a>
+    </div>
+  </section>
+
+  <Newsletter />
+</BaseLayout>
+
+<style>
+  .hero { display: grid; grid-template-columns: 1.7fr 1fr; gap: clamp(1.2rem, 3vw, 2.2rem); padding-top: 2rem; }
+  .hero-side { display: flex; flex-direction: column; gap: .9rem; }
+  .side-title { margin: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: .1em; font-family: var(--font-body); border-bottom: 2px solid var(--text); padding-bottom: .4rem; }
+  .hero-side .btn { align-self: flex-start; }
+  .topics { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: .8rem; }
+  .topics a { display: flex; align-items: center; gap: .7rem; min-height: 64px; padding: .7rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); text-decoration: none; font-weight: 600; }
+  .topics a:hover { border-color: var(--accent); color: var(--accent); }
+  .t-icon { flex: 0 0 2.2rem; height: 2.2rem; border-radius: 50%; display: grid; place-items: center; background: var(--primary); color: var(--on-primary); font-size: .95rem; }
+  .partner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); padding: clamp(1.4rem, 4vw, 2.4rem); }
+  .partner h2 { margin: .3rem 0 .4rem; }
+  .partner p { margin: 0; color: var(--muted); max-width: 40rem; }
+  @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } }
+</style>

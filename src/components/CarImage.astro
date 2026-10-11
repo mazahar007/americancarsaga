@@ -1,0 +1,33 @@
+---
+// Shows the article image, or a tasteful drawn placeholder when none is set.
+interface Props { src?: string; alt?: string; label?: string; eager?: boolean; ratio?: string; sizes?: string }
+const { src, alt = '', label = '', eager = false, ratio = '16 / 9' } = Astro.props;
+const palettes = [
+  ['#1d3557', '#3b5a85'], ['#6b2a2a', '#9b4a3a'], ['#2f4f3e', '#4f7a5f'], ['#5a4320', '#8e6a32'], ['#2e3440', '#55607a'],
+];
+const seed = [...(label || alt)].reduce((a, c) => a + c.charCodeAt(0), 0);
+const [c1, c2] = palettes[seed % palettes.length];
+---
+<div class="car-img" style={`aspect-ratio:${ratio}`}>
+  {src ? (
+    <img src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} width="1200" height="675" />
+  ) : (
+    <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" role="img" aria-label={alt || 'American Car Saga'}>
+      <defs>
+        <linearGradient id={`g${seed}`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color={c1} /><stop offset="1" stop-color={c2} /></linearGradient>
+      </defs>
+      <rect width="320" height="180" fill={`url(#g${seed})`} />
+      <path d="M0 140h320" stroke="#fdfaf3" stroke-opacity=".18" stroke-width="2" />
+      <g fill="#fdfaf3" fill-opacity=".9">
+        <path d="M58 128c0-8 4-13 14-15l34-6 26-19c6-4 13-6 21-6h44c9 0 16 3 22 9l17 16 33 5c9 1 15 7 15 15v6c0 3-2 5-5 5h-15a20 20 0 0 0-40 0H124a20 20 0 0 0-40 0H64c-4 0-6-3-6-6z" />
+      </g>
+      <g fill={c1}><circle cx="104" cy="133" r="13" /><circle cx="227" cy="133" r="13" /></g>
+      <g fill="#fdfaf3" fill-opacity=".9"><circle cx="104" cy="133" r="6" /><circle cx="227" cy="133" r="6" /></g>
+      <path d="M140 92l12-8c4-3 8-4 13-4h28c5 0 10 2 14 6l10 9z" fill={c1} fill-opacity=".55" />
+    </svg>
+  )}
+</div>
+<style>
+  .car-img { position: relative; overflow: hidden; border-radius: var(--radius); background: var(--surface-2); }
+  .car-img img, .car-img svg { width: 100%; height: 100%; object-fit: cover; }
+</style>

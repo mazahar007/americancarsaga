@@ -1,0 +1,46 @@
+---
+// Lightweight YouTube embed: shows only a thumbnail until the reader clicks play,
+// so pages stay fast (no heavy YouTube scripts on load).
+import { youtubeId } from '../lib/utils';
+import CarImage from './CarImage.astro';
+interface Props { url?: string; title: string }
+const { url, title } = Astro.props;
+const id = youtubeId(url);
+---
+{id ? (
+  <div class="yt" data-id={id} data-title={title}>
+    <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" loading="lazy" decoding="async" width="480" height="360" />
+    <button type="button" class="yt-play" aria-label={`Play video: ${title}`}>
+      <svg viewBox="0 0 68 48" width="76" height="54" aria-hidden="true"><path d="M66.5 7.7A8.5 8.5 0 0 0 60.5 1.7C55.2.3 34 .3 34 .3S12.8.3 7.5 1.7a8.5 8.5 0 0 0-6 6C.2 13 .2 24 .2 24s0 11 1.3 16.3a8.5 8.5 0 0 0 6 6c5.3 1.4 26.5 1.4 26.5 1.4s21.2 0 26.5-1.4a8.5 8.5 0 0 0 6-6C67.8 35 67.8 24 67.8 24s0-11-1.3-16.3z" fill="#c4302b"/><path d="M45 24 27 14v20z" fill="#fff"/></svg>
+      <span>Play video</span>
+    </button>
+  </div>
+) : (
+  <div class="yt yt-empty">
+    <CarImage alt={title} label={title} />
+    <span class="soon">Video coming soon</span>
+  </div>
+)}
+<script is:inline>
+  document.querySelectorAll('.yt[data-id]').forEach(function (el) {
+    if (el.dataset.bound) return; el.dataset.bound = '1';
+    el.querySelector('.yt-play').addEventListener('click', function () {
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + el.dataset.id + '?autoplay=1&rel=0';
+      f.title = el.dataset.title || 'YouTube video';
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      f.allowFullscreen = true;
+      el.innerHTML = ''; el.appendChild(f);
+    });
+  });
+</script>
+<style>
+  .yt { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; background: #111; }
+  .yt img { width: 100%; height: 100%; object-fit: cover; }
+  .yt :global(iframe) { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .yt-play { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; background: rgba(0,0,0,.18); border: 0; cursor: pointer; color: #fff; font: 600 .9rem var(--font-body); }
+  .yt-play:hover { background: rgba(0,0,0,.3); }
+  .yt-play span { background: rgba(0,0,0,.6); padding: .25rem .7rem; border-radius: 99px; }
+  .yt-empty :global(.car-img) { border-radius: 0; height: 100%; }
+  .soon { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,.65); color: #fff; padding: .5rem 1rem; border-radius: 99px; font-weight: 600; font-size: .9rem; }
+</style>

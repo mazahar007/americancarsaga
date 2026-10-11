@@ -1,0 +1,26 @@
+---
+import { SITE } from '../config';
+interface Props { slot?: keyof typeof SITE.adSlots; format?: 'auto' | 'fluid' | 'rectangle'; minHeight?: number }
+const { slot = 'inArticle', format = 'auto', minHeight = 120 } = Astro.props;
+const client = SITE.adsenseClient;
+const slotId = SITE.adSlots[slot];
+const show = client ? Boolean(slotId) : SITE.showAdPlaceholders;
+---
+{show && (
+  <aside class="ad" aria-label="Advertisement" style={`min-height:${minHeight}px`}>
+    <span class="ad-label">Advertisement</span>
+    {client && slotId ? (
+      <>
+        <ins class="adsbygoogle" style="display:block" data-ad-client={client} data-ad-slot={slotId} data-ad-format={format} data-full-width-responsive="true"></ins>
+        <script is:inline>(window.adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </>
+    ) : (
+      <div class="ad-placeholder">Ad space</div>
+    )}
+  </aside>
+)}
+<style>
+  .ad { margin: 2rem auto; text-align: center; width: 100%; display: flex; flex-direction: column; gap: .3rem; }
+  .ad-label { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .ad-placeholder { flex: 1; display: grid; place-items: center; border: 1px dashed var(--border); border-radius: 8px; color: var(--muted); font-size: .85rem; background: var(--surface); min-height: inherit; }
+</style>

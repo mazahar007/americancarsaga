@@ -1,0 +1,136 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CarImage from '../../components/CarImage.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ProsCons from '../../components/ProsCons.astro';
+import RatingBox from '../../components/RatingBox.astro';
+import ProductBox from '../../components/ProductBox.astro';
+import YouTube from '../../components/YouTube.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getArticles, formatDate, readingTime, type Article } from '../../lib/utils';
+import { SITE, getCategory } from '../../config';
+
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article, articles } }));
+}
+interface Props { article: Article; articles: Article[] }
+const { article, articles } = Astro.props;
+const { data } = article;
+const { Content } = await render(article);
+const cat = getCategory(data.category)!;
+const related = articles.filter((a) => a.id !== article.id && a.data.category === data.category).slice(0, 3);
+const more = related.length < 3 ? articles.filter((a) => a.id !== article.id && !related.includes(a)).slice(0, 3 - related.length) : [];
+const popular = articles.filter((a) => a.id !== article.id).slice(0, 4);
+const url = new URL(Astro.url.pathname, Astro.site).toString();
+const isAffiliate = data.products.length > 0 || data.category === 'buying-guides';
+
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': typeof data.rating === 'number' ? 'Review' : 'Article',
+  headline: data.title,
+  description: data.description,
+  datePublished: data.pubDate.toISOString(),
+  dateModified: (data.updatedDate ?? data.pubDate).toISOString(),
+  author: { '@type': 'Person', name: data.author },
+  publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: `${SITE.url}/favicon.svg` } },
+  mainEntityOfPage: url,
+  ...(data.heroImage ? { image: new URL(data.heroImage, Astro.site).toString() } : {}),
+  ...(typeof data.rating === 'number'
+    ? { itemReviewed: { '@type': 'Car', name: data.title }, reviewRating: { '@type': 'Rating', ratingValue: data.rating, bestRating: 5 } }
+    : {}),
+};
+---
+<BaseLayout title={data.title} description={data.description} image={data.heroImage} type="article" publishedTime={data.pubDate} jsonLd={jsonLd}>
+  <div class="container">
+    <Breadcrumbs items={[{ href: `/category/${cat.slug}`, label: cat.name }, { label: data.title }]} />
+    <div class="layout">
+      <article class="post">
+        <header>
+          <div class="tags-top">
+            <a class="kicker" href={`/category/${cat.slug}`}>{cat.name}</a>
+            {data.sponsored && <span class="sponsored-tag">Sponsored{data.sponsorName ? ` by ${data.sponsorName}` : ''}</span>}
+          </div>
+          <h1>{data.title}</h1>
+          <p class="dek">{data.description}</p>
+          <p class="byline">
+            By <strong>{data.author}</strong> · <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate)}</time>
+            {data.updatedDate && <> · Updated <time datetime={data.updatedDate.toISOString()}>{formatDate(data.updatedDate)}</time></>}
+            · {readingTime(article.body)} min read
+          </p>
+        </header>
+
+        <CarImage src={data.heroImage} alt={data.heroAlt ?? data.title} label={data.title} eager />
+
+        {isAffiliate && (
+          <p class="disclosure">Reader-supported: when you buy through links on our site, we may earn an affiliate commission. <a href="/affiliate-disclosure">How we review</a>.</p>
+        )}
+
+        <AdSlot slot="header" />
+
+        {data.youtubeUrl && <div class="post-video"><YouTube url={data.youtubeUrl} title={data.title} /></div>}
+
+        {(typeof data.rating === 'number' || data.specs.length > 0) && <RatingBox rating={data.rating} verdict={data.verdict} specs={data.specs} />}
+
+        <div class="prose">
+          <Content />
+        </div>
+
+        <ProsCons pros={data.pros} cons={data.cons} />
+        <ProductBox products={data.products} />
+
+        <AdSlot slot="inArticle" />
+
+        {data.tags.length > 0 && (
+          <ul class="tags">{data.tags.map((t) => <li><a href={`/search?q=${encodeURIComponent(t)}`}>#{t}</a></li>)}</ul>
+        )}
+        <ShareButtons url={url} title={data.title} />
+      </article>
+
+      <aside class="sidebar">
+        <AdSlot slot="sidebar" minHeight={250} />
+        <section class="side-box">
+          <h2>Popular Now</h2>
+          {popular.map((a) => <ArticleCard article={a} size="compact" />)}
+        </section>
+        <section class="side-box">
+          <h2>Topics</h2>
+          <a class="btn btn-ghost side-btn" href={`/category/${cat.slug}`}>More {cat.short} →</a>
+          <a class="btn btn-ghost side-btn" href="/videos">Watch videos →</a>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  {(related.length + more.length) > 0 && (
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head"><h2>Keep Reading</h2><a href={`/category/${cat.slug}`}>All {cat.short} →</a></div>
+        <div class="grid grid-3">{[...related, ...more].map((a) => <ArticleCard article={a} />)}</div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+  .post { max-width: 46rem; }
+  .tags-top { display: flex; gap: .7rem; align-items: center; margin-top: .6rem; }
+  .dek { font-size: 1.15rem; color: var(--muted); font-family: var(--font-head); margin-bottom: .8rem; }
+  .byline { font-size: .88rem; color: var(--muted); margin-bottom: 1.4rem; }
+  .byline strong { color: var(--text); }
+  .disclosure { font-size: .82rem; color: var(--muted); background: var(--surface-2); border-radius: 8px; padding: .6rem .9rem; margin: 1rem 0 0; }
+  .post-video { margin: 1.5rem 0; }
+  .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0 0; }
+  .tags a { display: inline-block; padding: .3rem .7rem; background: var(--surface-2); border-radius: 99px; font-size: .85rem; color: var(--text); text-decoration: none; }
+  .sidebar { position: sticky; top: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+  .sidebar :global(.ad) { margin: 0; }
+  .side-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; display: flex; flex-direction: column; gap: .8rem; }
+  .side-box h2 { margin: 0; font: 700 .8rem/1 var(--font-body); text-transform: uppercase; letter-spacing: .12em; color: var(--accent); }
+  .side-btn { width: 100%; }
+  @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } .sidebar { position: static; } .post { max-width: none; } }
+  @media print { .sidebar, :global(.site-header), :global(.site-footer), :global(.ad), .section-alt { display: none !important; } }
+</style>

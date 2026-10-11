@@ -1,0 +1,129 @@
+---
+import { SITE, NAV } from '../config';
+import Logo from './Logo.astro';
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || path.startsWith(href + '/');
+---
+<header class="site-header">
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <p class="tagline">{SITE.tagline}</p>
+      <div class="reader-tools" role="group" aria-label="Reading preferences">
+        <span class="tools-label">Text size</span>
+        <button type="button" class="tool" data-size="sm" aria-label="Smaller text">A−</button>
+        <button type="button" class="tool" data-size="" aria-label="Normal text">A</button>
+        <button type="button" class="tool" data-size="lg" aria-label="Larger text">A+</button>
+        <button type="button" class="tool" data-size="xl" aria-label="Largest text">A++</button>
+        <button type="button" class="tool theme-toggle" aria-label="Switch light or night mode">
+          <span class="when-light">☾ Night</span><span class="when-dark">☀ Day</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container masthead">
+    <a href="/" class="brand" aria-label={`${SITE.name} home`}>
+      <Logo />
+      <span class="brand-text">
+        <span class="brand-name">American Car <em>Saga</em></span>
+        <span class="brand-sub">Classic • Muscle • Heritage</span>
+      </span>
+    </a>
+    <div class="masthead-actions">
+      <a href="/search" class="icon-btn" aria-label="Search articles">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <span class="hide-sm">Search</span>
+      </a>
+      <button type="button" class="icon-btn menu-btn" aria-expanded="false" aria-controls="site-nav">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <span>Menu</span>
+      </button>
+    </div>
+  </div>
+
+  <nav id="site-nav" class="site-nav" aria-label="Main">
+    <ul class="container">
+      {NAV.map((n) => (
+        <li><a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<script is:inline>
+  (function () {
+    var d = document.documentElement;
+    document.querySelectorAll('.reader-tools [data-size]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var v = b.getAttribute('data-size');
+        if (v) d.dataset.size = v; else delete d.dataset.size;
+        try { v ? localStorage.setItem('acs-size', v) : localStorage.removeItem('acs-size'); } catch (e) {}
+      });
+    });
+    var tt = document.querySelector('.theme-toggle');
+    tt && tt.addEventListener('click', function () {
+      var dark = d.dataset.theme !== 'dark';
+      if (dark) d.dataset.theme = 'dark'; else delete d.dataset.theme;
+      try { dark ? localStorage.setItem('acs-theme', 'dark') : localStorage.removeItem('acs-theme'); } catch (e) {}
+    });
+    var mb = document.querySelector('.menu-btn'), nav = document.getElementById('site-nav');
+    mb && mb.addEventListener('click', function () {
+      var open = nav.classList.toggle('open');
+      mb.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  })();
+</script>
+
+<style>
+  .site-header { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .topbar { background: var(--band); color: var(--on-band); font-size: .8rem; }
+  .topbar-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 46px; }
+  .tagline { margin: 0; opacity: .92; }
+  .reader-tools { display: flex; align-items: center; gap: .3rem; flex-wrap: wrap; }
+  .tools-label { margin-right: .25rem; opacity: .85; }
+  .tool {
+    min-width: 40px; min-height: 36px; padding: 0 .55rem; border-radius: 6px; cursor: pointer;
+    background: transparent; color: var(--on-band); border: 1px solid color-mix(in srgb, var(--on-band) 40%, transparent);
+    font: 700 .8rem/1 var(--font-body);
+  }
+  .tool:hover { background: color-mix(in srgb, var(--on-band) 15%, transparent); }
+  :global(:root[data-theme="dark"]) .when-light, :global(:root:not([data-theme="dark"])) .when-dark { display: none; }
+
+  .masthead { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 1rem; padding-bottom: 1rem; }
+  .brand { display: flex; align-items: center; gap: .8rem; text-decoration: none; color: var(--text); }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .brand-name { font: 700 clamp(1.35rem, 3vw, 1.9rem)/1.1 var(--font-head); letter-spacing: -.01em; }
+  .brand-name em { color: var(--accent); font-style: italic; }
+  .brand-sub { font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-top: .3rem; }
+  .masthead-actions { display: flex; gap: .5rem; }
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: .45rem; min-height: 48px; padding: 0 .9rem;
+    border: 2px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text);
+    font: 600 .9rem/1 var(--font-body); text-decoration: none; cursor: pointer;
+  }
+  .icon-btn svg { flex: none; }
+  .icon-btn:hover { border-color: var(--primary); }
+  .menu-btn { display: none; }
+
+  .site-nav { border-top: 1px solid var(--border); }
+  .site-nav ul { list-style: none; margin: 0 auto; display: flex; flex-wrap: wrap; gap: .2rem; }
+  .site-nav a {
+    display: block; padding: .85rem .9rem; color: var(--text); text-decoration: none;
+    font: 600 .95rem/1.2 var(--font-body); border-bottom: 3px solid transparent;
+  }
+  .site-nav a:hover { color: var(--accent); }
+  .site-nav a[aria-current='page'] { border-bottom-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 860px) {
+    .tagline, .tools-label { display: none; }
+    .topbar-inner { justify-content: center; }
+    .menu-btn { display: inline-flex; }
+    .hide-sm { display: none; }
+    .site-nav { display: none; }
+    .site-nav.open { display: block; }
+    .site-nav ul { flex-direction: column; padding-top: .3rem; padding-bottom: .6rem; }
+    .site-nav a { padding: .9rem .4rem; border-bottom: 1px solid var(--border); font-size: 1.05rem; }
+    .site-nav a[aria-current='page'] { border-bottom-color: var(--border); }
+  }
+  @media (max-width: 420px) { .brand-sub { display: none; } }
+</style>

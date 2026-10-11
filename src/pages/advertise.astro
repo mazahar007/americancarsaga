@@ -1,0 +1,18 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { SITE } from '../config';
+---
+<PageLayout title="Advertise & Brand Partnerships" description={`Advertise with ${SITE.name}`} intro="Put your brand in front of experienced, passionate classic car owners and collectors.">
+  <h2>Who reads {SITE.name}</h2>
+  <p>Our readers are mostly 45 to 75 years old: established enthusiasts, collectors and restorers who own, buy and maintain American cars — and who value trustworthy advice.</p>
+  <h2>Ways to work together</h2>
+  <ul>
+    <li><strong>Sponsored reviews & features</strong> — an honest, in-depth article about your product, clearly labeled as sponsored.</li>
+    <li><strong>Buying-guide placement</strong> — inclusion in relevant product round-ups.</li>
+    <li><strong>Video integration</strong> — product segments in our YouTube and on-site videos.</li>
+    <li><strong>Display & newsletter</strong> — banner placements and newsletter mentions.</li>
+  </ul>
+  <h2>Our standards</h2>
+  <p>All paid content is marked “Sponsored”. We only partner with products we would be comfortable recommending to our own readers.</p>
+  <p><a class="btn btn-accent" href={`mailto:${SITE.email}?subject=Partnership%20enquiry`}>Request our media kit</a></p>
+</PageLayout>

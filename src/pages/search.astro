@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+---
+<BaseLayout title="Search" description="Search American Car Saga articles, reviews and guides." noindex>
+  <div class="container search-page">
+    <Breadcrumbs items={[{ label: 'Search' }]} />
+    <h1>Search the Saga</h1>
+    <form role="search" class="search-form" onsubmit="return false">
+      <label for="q" class="visually-hidden">Search for</label>
+      <input id="q" name="q" type="search" placeholder="Try “Mustang”, “GTO”, “insurance”…" autocomplete="off" />
+    </form>
+    <p id="status" class="status" aria-live="polite"></p>
+    <ul id="results" class="results"></ul>
+  </div>
+</BaseLayout>
+<script is:inline>
+  (function () {
+    var input = document.getElementById('q'), list = document.getElementById('results'), status = document.getElementById('status');
+    var data = null;
+    function esc(s) { return s.replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function run() {
+      var q = input.value.trim().toLowerCase();
+      history.replaceState(null, '', q ? '?q=' + encodeURIComponent(q) : location.pathname);
+      if (!q) { list.innerHTML = ''; status.textContent = ''; return; }
+      var words = q.split(/\s+/);
+      var hits = data.filter(function (a) {
+        var hay = (a.t + ' ' + a.d + ' ' + a.c + ' ' + a.k).toLowerCase();
+        return words.every(function (w) { return hay.indexOf(w) !== -1; });
+      });
+      status.textContent = hits.length + (hits.length === 1 ? ' result' : ' results') + ' for “' + input.value.trim() + '”';
+      list.innerHTML = hits.map(function (a) {
+        return '<li><span class="kicker">' + esc(a.c) + '</span><h2><a href="' + a.u + '">' + esc(a.t) + '</a></h2><p>' + esc(a.d) + '</p></li>';
+      }).join('');
+    }
+    fetch('/search.json').then(function (r) { return r.json(); }).then(function (j) {
+      data = j;
+      var q = new URLSearchParams(location.search).get('q');
+      if (q) input.value = q;
+      run();
+      input.addEventListener('input', run);
+    });
+    input.focus();
+  })();
+</script>
+<style>
+  .search-page { max-width: 900px; min-height: 50vh; }
+  .search-form input { font-size: 1.15rem; min-height: 58px; }
+  .status { color: var(--muted); margin-top: 1rem; }
+  .results { list-style: none; padding: 0; }
+  .results :global(li) { padding: 1.1rem 0; border-bottom: 1px solid var(--border); }
+  .results :global(h2) { margin: .3rem 0; font-size: 1.3rem; }
+  .results :global(h2 a) { color: var(--text); }
+  .results :global(p) { margin: 0; color: var(--muted); }
+</style>

@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { CATEGORIES } from '../../config';
+import { getArticles } from '../../lib/utils';
+
+export function getStaticPaths() {
+  return CATEGORIES.map((c) => ({ params: { cat: c.slug }, props: { category: c } }));
+}
+const { category } = Astro.props;
+const list = (await getArticles()).filter((a) => a.data.category === category.slug);
+const first = list.slice(0, 6), rest = list.slice(6);
+---
+<BaseLayout title={category.name} description={category.description}>
+  <div class="cat-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: category.name }]} />
+      <h1>{category.name}</h1>
+      <p>{category.description}</p>
+    </div>
+  </div>
+  <div class="container section">
+    {list.length === 0 ? (
+      <p class="empty">New articles are on the way. Please check back soon.</p>
+    ) : (
+      <>
+        <div class="grid grid-3">{first.map((a, i) => <ArticleCard article={a} eager={i < 3} headingLevel="h2" />)}</div>
+        {rest.length > 0 && (<><AdSlot slot="inArticle" /><div class="grid grid-3">{rest.map((a) => <ArticleCard article={a} headingLevel="h2" />)}</div></>)}
+      </>
+    )}
+  </div>
+</BaseLayout>
+<style>
+  .cat-hero { background: var(--surface-2); border-bottom: 1px solid var(--border); padding-bottom: 1.6rem; }
+  .cat-hero h1 { margin-bottom: .3rem; }
+  .cat-hero p { color: var(--muted); max-width: 44rem; margin: 0; font-size: 1.08rem; }
+  .empty { font-size: 1.1rem; color: var(--muted); }
+</style>

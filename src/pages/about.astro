@@ -1,0 +1,16 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { SITE } from '../config';
+---
+<PageLayout title="About Us" description={`About ${SITE.name}`} intro="We are a small team of lifelong car people telling the stories of the American automobile — honestly, clearly and with respect for the readers who lived through its golden years.">
+  <h2>What we do</h2>
+  <p>{SITE.name} publishes reviews of classic and modern American cars, stories from automotive history, straightforward pros and cons, value and market insight, and buying guides for the products owners actually use.</p>
+  <h2>Our promise to readers</h2>
+  <ul>
+    <li><strong>Honesty first.</strong> We tell you the bad along with the good.</li>
+    <li><strong>Easy to read.</strong> Large text, calm colors and no clutter. Use the <em>A+</em> button at the top of every page to make text bigger.</li>
+    <li><strong>Clear labels.</strong> Sponsored content and affiliate links are always marked.</li>
+  </ul>
+  <h2>Get in touch</h2>
+  <p>Have a story about your own car? We would love to hear it. <a href="/contact">Contact us</a>.</p>
+</PageLayout>

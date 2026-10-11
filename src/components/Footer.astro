@@ -1,0 +1,64 @@
+---
+import { SITE, CATEGORIES } from '../config';
+import Logo from './Logo.astro';
+const year = new Date().getFullYear();
+const socials = Object.entries(SITE.social).filter(([, url]) => url);
+---
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="about">
+      <a href="/" class="f-brand"><Logo size={40} /><span>{SITE.name}</span></a>
+      <p>{SITE.description}</p>
+      {socials.length > 0 && (
+        <ul class="social">
+          {socials.map(([name, url]) => <li><a href={url} rel="noopener" target="_blank">{name[0].toUpperCase() + name.slice(1)}</a></li>)}
+        </ul>
+      )}
+    </div>
+    <div>
+      <h2>Explore</h2>
+      <ul>
+        {CATEGORIES.map((c) => <li><a href={`/category/${c.slug}`}>{c.name}</a></li>)}
+        <li><a href="/videos">Videos</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Company</h2>
+      <ul>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/advertise">Advertise & Brand Partnerships</a></li>
+        <li><a href="/rss.xml">RSS Feed</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Legal</h2>
+      <ul>
+        <li><a href="/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/terms">Terms of Use</a></li>
+        <li><a href="/affiliate-disclosure">Affiliate Disclosure</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container legal">
+    <p>© {year} {SITE.name}. All rights reserved. Some links on this site are affiliate links — we may earn a commission at no extra cost to you.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: #17263b; color: #e9e3d6; margin-top: 3rem; font-size: .92rem; }
+  :global(:root[data-theme="dark"]) .site-footer { background: #121110; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; padding-top: 3rem; padding-bottom: 2rem; }
+  .f-brand { display: flex; align-items: center; gap: .7rem; color: #fff; text-decoration: none; font: 700 1.3rem var(--font-head); margin-bottom: .8rem; }
+  .about p { max-width: 30rem; color: #cfc8b8; }
+  h2 { font: 700 .78rem/1 var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: #d2a95a; margin: .4rem 0 1rem; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { margin: .45rem 0; }
+  a { color: #e9e3d6; text-decoration: none; }
+  a:hover { text-decoration: underline; color: #fff; }
+  .social { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .legal { border-top: 1px solid rgba(255,255,255,.12); padding-top: 1.2rem; padding-bottom: 1.6rem; color: #b5ae9f; font-size: .82rem; }
+  .legal p { margin: 0; }
+  @media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr 1fr; } .about { grid-column: 1 / -1; } }
+  @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
+</style>
