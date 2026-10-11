@@ -7,6 +7,8 @@ backend:
   # If you host on Netlify, keep this. Otherwise see README.
   base_url: https://api.netlify.com
   auth_endpoint: auth
+  # Your Netlify site address (keeps login working after you add a custom domain)
+  site_domain: americancarsaga.netlify.app
 
 # Lets you test locally with `npm run cms` + `npm run dev`
 local_backend: true
