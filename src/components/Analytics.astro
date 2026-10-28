@@ -44,7 +44,9 @@ const pageInfo = { content_group: contentGroup ?? 'General', page_type: pageType
       var el = e.target.closest && e.target.closest('a, button');
       if (!el) return;
       var rel = el.getAttribute('rel') || '';
-      if (el.dataset.product || rel.indexOf('sponsored') > -1) {
+      if (el.dataset.pod === 'buy') {
+        acsTrack('pod_order_click', { product_name: el.dataset.product, link_url: el.href, link_domain: el.hostname });
+      } else if (el.dataset.product || rel.indexOf('sponsored') > -1) {
         // Affiliate click — the most important event for earnings
         acsTrack('affiliate_click', {
           product_name: el.dataset.product || el.textContent.trim().slice(0, 100),

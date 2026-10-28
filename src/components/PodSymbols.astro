@@ -1,0 +1,83 @@
+---
+// Vector artwork for the Garage Gear designs. Colours come from CSS variables
+// (--ink = main colour, --ink2 = accent) so each design recolours itself to suit
+// light or dark products. Add a new <symbol id="d-..."> here for a new design.
+const ticks = Array.from({ length: 11 }, (_, i) => {
+  const a = ((-210 + i * 24) * Math.PI) / 180;
+  const r1 = i % 2 === 0 ? 52 : 58, r2 = 66;
+  return { x1: 100 + r1 * Math.cos(a), y1: 100 + r1 * Math.sin(a), x2: 100 + r2 * Math.cos(a), y2: 100 + r2 * Math.sin(a), red: i >= 9 };
+});
+const needle = (() => { const a = (-210 + 7 * 24) * Math.PI / 180; return { x: 100 + 54 * Math.cos(a), y: 100 + 54 * Math.sin(a) }; })();
+const car = 'M10 124 L14 108 Q17 100 32 98 L62 94 L80 78 Q86 73 96 73 H128 Q138 73 146 79 L162 94 L182 98 Q192 100 192 110 V122 Q192 126 188 126 H10 Z';
+---
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="d-route66" viewBox="0 0 200 200">
+      <path d="M100 12 L176 38 V104 Q176 156 100 190 Q24 156 24 104 V38 Z" fill="none" stroke="var(--ink)" stroke-width="8" stroke-linejoin="round" />
+      <path d="M100 26 L162 47 V102 Q162 146 100 175 Q38 146 38 102 V47 Z" fill="var(--ink)" opacity=".1" />
+      <text x="100" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="16" letter-spacing="5" fill="var(--ink)">U.S.</text>
+      <text x="100" y="138" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="66" fill="var(--ink2)">66</text>
+      <text x="100" y="157" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="8" letter-spacing="2" fill="var(--ink)">MOTHER ROAD</text>
+    </symbol>
+
+    <symbol id="d-stripes" viewBox="0 0 200 200">
+      <text x="100" y="52" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="22" letter-spacing="2" fill="var(--ink)">AMERICAN</text>
+      <text x="100" y="72" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="11" letter-spacing="7" fill="var(--ink2)">MUSCLE</text>
+      <path d={car} fill="var(--ink)" transform="translate(0 6)" />
+      <circle cx="48" cy="132" r="14" fill="var(--ink)" stroke="var(--ink2)" stroke-width="3" />
+      <circle cx="154" cy="132" r="14" fill="var(--ink)" stroke="var(--ink2)" stroke-width="3" />
+      <path d="M12 162 H188 M12 172 H188" stroke="var(--ink2)" stroke-width="5" stroke-linecap="round" />
+      <text x="100" y="192" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="9" letter-spacing="5" fill="var(--ink)">SINCE 1964</text>
+    </symbol>
+
+    <symbol id="d-gauge" viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="80" fill="none" stroke="var(--ink)" stroke-width="7" />
+      <circle cx="100" cy="100" r="70" fill="var(--ink)" opacity=".08" />
+      {ticks.map((t) => <line x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke={t.red ? 'var(--ink2)' : 'var(--ink)'} stroke-width="3.5" stroke-linecap="round" />)}
+      <line x1="100" y1="100" x2={needle.x} y2={needle.y} stroke="var(--ink2)" stroke-width="4.5" stroke-linecap="round" />
+      <circle cx="100" cy="100" r="7" fill="var(--ink2)" />
+      <text x="100" y="140" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="34" fill="var(--ink)">V8</text>
+      <text x="100" y="158" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="9" letter-spacing="4" fill="var(--ink)">x1000 RPM</text>
+    </symbol>
+
+    <symbol id="d-detroit" viewBox="0 0 200 200">
+      <text x="100" y="82" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="52" letter-spacing="1" fill="var(--ink)">BUILT</text>
+      <path d="M26 104 H78 M122 104 H174" stroke="var(--ink2)" stroke-width="3" />
+      <text x="100" y="109" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="15" letter-spacing="3" fill="var(--ink2)">IN</text>
+      <text x="100" y="152" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="38" fill="var(--ink)">DETROIT</text>
+      <path d="M100 168 l4 8.5 9.4 1.2 -6.9 6.4 1.8 9.3 -8.3 -4.6 -8.3 4.6 1.8 -9.3 -6.9 -6.4 9.4 -1.2 z" fill="var(--ink2)" transform="translate(0 -4) scale(1)" />
+    </symbol>
+
+    <symbol id="d-sunset" viewBox="0 0 200 200">
+      <mask id="sun-mask">
+        <rect width="200" height="200" fill="#000" />
+        <circle cx="100" cy="86" r="58" fill="#fff" />
+        <rect x="30" y="92" width="140" height="3" fill="#000" />
+        <rect x="30" y="102" width="140" height="5" fill="#000" />
+        <rect x="30" y="114" width="140" height="7" fill="#000" />
+        <rect x="30" y="127" width="140" height="9" fill="#000" />
+      </mask>
+      <rect width="200" height="200" fill="var(--ink2)" mask="url(#sun-mask)" />
+      <path d="M8 150 H192" stroke="var(--ink)" stroke-width="3" />
+      <path d={car} fill="var(--ink)" transform="translate(30 56) scale(.62)" />
+      <circle cx="59.8" cy="142" r="8" fill="var(--ink)" />
+      <circle cx="125.5" cy="142" r="8" fill="var(--ink)" />
+      <text x="100" y="178" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="17" letter-spacing="3" fill="var(--ink)">DRIVE-IN NIGHTS</text>
+      <text x="100" y="192" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="8" letter-spacing="5" fill="var(--ink2)">DOUBLE FEATURE</text>
+    </symbol>
+
+    <symbol id="d-blueprint" viewBox="0 0 200 200">
+      <rect x="8" y="8" width="184" height="184" rx="6" fill="none" stroke="var(--ink)" stroke-width="3" stroke-dasharray="8 5" />
+      <g stroke="var(--ink)" stroke-width=".8" opacity=".35">
+        {[40, 70, 100, 130, 160].map((v) => <><path d={`M${v} 14 V186`} /><path d={`M14 ${v} H186`} /></>)}
+      </g>
+      <path d={car} fill="none" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round" transform="translate(0 -6)" />
+      <circle cx="48" cy="120" r="14" fill="none" stroke="var(--ink)" stroke-width="3" />
+      <circle cx="154" cy="120" r="14" fill="none" stroke="var(--ink)" stroke-width="3" />
+      <path d="M10 148 H192 M10 143 V153 M192 143 V153" stroke="var(--ink2)" stroke-width="2" fill="none" />
+      <text x="100" y="164" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="9" letter-spacing="2" fill="var(--ink2)">182 UNITS</text>
+      <text x="100" y="34" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="15" letter-spacing="2" fill="var(--ink)">BLUEPRINT ’69</text>
+      <text x="100" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="8" letter-spacing="4" fill="var(--ink)">SCALE 1:1 • V8 • RWD</text>
+    </symbol>
+  </defs>
+</svg>

@@ -1,0 +1,285 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PodSymbols from '../components/PodSymbols.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { SITE } from '../config';
+import { POD_DESIGNS, POD_PRODUCTS, POD_COLORS } from '../data/pod';
+
+const first = POD_DESIGNS[0];
+const cfg = {
+  storeUrl: SITE.pod.storeUrl,
+  email: SITE.email,
+  designs: Object.fromEntries(POD_DESIGNS.map((d) => [d.id, { name: d.name, url: d.url ?? '' }])),
+  products: Object.fromEntries(POD_PRODUCTS.map((p) => [p.id, p.name])),
+  colors: Object.fromEntries(POD_COLORS.map((c) => [c.id, { name: c.name, hex: c.hex }])),
+};
+const jsonLd = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Garage Gear', description: 'Original American car-culture designs on shirts, hoodies, mugs and posters.', url: `${SITE.url}/garage-gear` };
+---
+<BaseLayout title="Garage Gear — Car Culture Apparel & Gifts" description="Original American car designs on tees, hoodies, mugs and posters. Preview every design on every product, add your own name or year, then order." jsonLd={jsonLd} contentGroup="Garage Gear" pageType="shop">
+  <PodSymbols />
+
+  <section class="gg-hero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Garage Gear' }]} />
+      <p class="kicker">Print on demand · Made for car people</p>
+      <h1>Garage Gear</h1>
+      <p class="lead">Original designs from the American Car Saga studio. Try every design on every product, put your own name or year on it, and order. Each piece is printed only after you order, so nothing is wasted.</p>
+    </div>
+  </section>
+
+  <section class="section gg-studio" id="studio" aria-labelledby="studio-h">
+    <div class="container">
+      <h2 id="studio-h" class="visually-hidden">Design studio</h2>
+      <div class="studio-grid">
+        <div class="stage" id="stage" data-product="tee" style={`--g:${POD_COLORS[0].hex};--ink:#1d1d20;--ink2:#9b2c2c`}>
+          <svg id="mock" viewBox="0 0 400 400" role="img" aria-label="Product preview">
+            <defs>
+              <linearGradient id="cyl" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".28" /><stop offset=".3" stop-color="#fff" stop-opacity=".18" /><stop offset=".55" stop-color="#000" stop-opacity="0" /><stop offset="1" stop-color="#000" stop-opacity=".3" /></linearGradient>
+              <linearGradient id="fold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".14" /><stop offset="1" stop-color="#000" stop-opacity=".16" /></linearGradient>
+            </defs>
+            <ellipse cx="200" cy="372" rx="130" ry="9" fill="#000" opacity=".12" />
+
+            <g data-p="tee">
+              <path d="M140 60 L100 75 L40 125 L75 165 L105 145 L105 340 L295 340 L295 145 L325 165 L360 125 L300 75 L260 60 Q200 102 140 60 Z" fill="var(--g)" stroke="#000" stroke-opacity=".18" stroke-width="2" stroke-linejoin="round" />
+              <path d="M140 60 Q200 102 260 60 Q200 82 140 60 Z" fill="#000" opacity=".18" />
+              <path d="M140 60 L100 75 L40 125 L75 165 L105 145 L105 340 L295 340 L295 145 L325 165 L360 125 L300 75 L260 60 Q200 102 140 60 Z" fill="url(#fold)" />
+              <use class="art" href={`#d-${first.id}`} x="138" y="112" width="124" height="124" />
+              <text class="custom" x="200" y="252" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="11" letter-spacing="1.5" fill="var(--ink)"></text>
+            </g>
+
+            <g data-p="hoodie" style="display:none">
+              <path d="M135 72 L90 88 L35 205 L72 220 L105 168 L105 352 L295 352 L295 168 L328 220 L365 205 L310 88 L265 72 Q200 36 135 72 Z" fill="var(--g)" stroke="#000" stroke-opacity=".18" stroke-width="2" stroke-linejoin="round" />
+              <path d="M150 74 Q200 8 250 74 Q200 118 150 74 Z" fill="#000" opacity=".16" />
+              <path d="M180 100 V150 M220 100 V150" stroke="var(--ink)" stroke-opacity=".6" stroke-width="3" stroke-linecap="round" />
+              <path d="M150 290 L250 290 L272 336 L128 336 Z" fill="#000" opacity=".1" />
+              <path d="M135 72 L90 88 L35 205 L72 220 L105 168 L105 352 L295 352 L295 168 L328 220 L365 205 L310 88 L265 72 Q200 36 135 72 Z" fill="url(#fold)" />
+              <use class="art" href={`#d-${first.id}`} x="144" y="152" width="112" height="112" />
+              <text class="custom" x="200" y="278" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="10" letter-spacing="1.5" fill="var(--ink)"></text>
+            </g>
+
+            <g data-p="mug" style="display:none">
+              <path d="M280 150 Q352 150 352 206 Q352 262 280 262" fill="none" stroke="var(--g)" stroke-width="20" />
+              <path d="M280 150 Q352 150 352 206 Q352 262 280 262" fill="none" stroke="#000" stroke-opacity=".18" stroke-width="2" transform="translate(0 0)" />
+              <rect x="108" y="104" width="176" height="200" rx="14" fill="var(--g)" stroke="#000" stroke-opacity=".18" stroke-width="2" />
+              <rect x="108" y="104" width="176" height="200" rx="14" fill="url(#cyl)" />
+              <ellipse cx="196" cy="104" rx="88" ry="12" fill="#000" opacity=".2" />
+              <ellipse cx="196" cy="104" rx="88" ry="12" fill="none" stroke="#000" stroke-opacity=".2" />
+              <use class="art" href={`#d-${first.id}`} x="136" y="140" width="120" height="120" />
+              <text class="custom" x="196" y="278" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="10" letter-spacing="1.5" fill="var(--ink)"></text>
+            </g>
+
+            <g data-p="poster" style="display:none">
+              <rect x="84" y="34" width="232" height="326" fill="#2b2924" />
+              <rect x="84" y="34" width="232" height="326" fill="none" stroke="#000" stroke-opacity=".3" stroke-width="2" />
+              <rect x="100" y="50" width="200" height="294" fill="var(--g)" />
+              <rect x="100" y="50" width="200" height="294" fill="url(#fold)" opacity=".5" />
+              <use class="art" href={`#d-${first.id}`} x="112" y="92" width="176" height="176" />
+              <text class="custom" x="200" y="302" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="13" letter-spacing="2" fill="var(--ink)"></text>
+              <text x="200" y="326" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" letter-spacing="3" fill="var(--ink)" opacity=".7">AMERICAN CAR SAGA</text>
+            </g>
+          </svg>
+          <p class="stage-caption" id="caption" aria-live="polite">{first.name} · T-Shirt · {POD_COLORS[0].name}</p>
+        </div>
+
+        <form class="controls" onsubmit="return false" aria-label="Customize your product">
+          <fieldset>
+            <legend>1. Pick a design</legend>
+            <div class="designs">
+              {POD_DESIGNS.map((d, i) => (
+                <label class="design">
+                  <input type="radio" name="design" value={d.id} checked={i === 0} />
+                  <span class="thumb" style="--ink:#1d3557;--ink2:#9b2c2c"><svg viewBox="0 0 200 200" aria-hidden="true"><use href={`#d-${d.id}`} width="200" height="200" /></svg></span>
+                  <span class="d-name">{d.name}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>2. Choose a product</legend>
+            <div class="pills">
+              {POD_PRODUCTS.map((p, i) => (
+                <label class="pill"><input type="radio" name="product" value={p.id} checked={i === 0} /><span><strong>{p.name}</strong><small>{p.note}</small></span></label>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>3. Pick a colour</legend>
+            <div class="swatches">
+              {POD_COLORS.map((c, i) => (
+                <label class="swatch" title={c.name}><input type="radio" name="color" value={c.id} checked={i === 0} /><span style={`background:${c.hex}`}></span><em>{c.name}</em></label>
+              ))}
+            </div>
+          </fieldset>
+
+          <div class="personal">
+            <label for="custom">4. Add your own line <small>(optional)</small></label>
+            <input id="custom" name="custom" type="text" maxlength="26" placeholder="e.g. DAVE’S 1969 CAMARO" autocomplete="off" />
+            <p class="hint">Your car, your name or your year. Shown under the design. Personalised items need the personalisation option enabled in the store.</p>
+          </div>
+
+          <div class="buy">
+            <a id="buy" class="btn btn-accent" href="#" rel="noopener" target="_blank" data-pod="buy">Order this design →</a>
+            <p class="ship">{SITE.pod.shippingNote}</p>
+            {!SITE.pod.storeUrl && <p class="ship soon">Our store opens soon. The button sends us a message so we can notify you.</p>}
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="coll-h">
+    <div class="container">
+      <div class="section-head"><h2 id="coll-h">The Collection</h2><span>{POD_DESIGNS.length} original designs</span></div>
+      <div class="grid grid-3">
+        {POD_DESIGNS.map((d, i) => (
+          <article class="coll-card" style={`--ink:${i % 2 ? '#f4efe3' : '#1d1d20'};--ink2:${i % 2 ? '#e3b866' : '#9b2c2c'}`}>
+            <div class="coll-art" style={`background:${['#f4efe3', '#1d3557', '#cdbb91', '#2f4f3e', '#f4efe3', '#9b2c2c'][i % 6]}`}>
+              <svg viewBox="0 0 200 200" aria-hidden="true" class="coll-svg"><use href={`#d-${d.id}`} width="200" height="200" /></svg>
+            </div>
+            <div class="coll-body">
+              <h3>{d.name}</h3>
+              <p>{d.tagline}</p>
+              <button type="button" class="btn btn-ghost try" data-design={d.id}>Try it on a product ↑</button>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div class="container"><AdSlot slot="inArticle" /></div>
+
+  <section class="section" aria-labelledby="how-h">
+    <div class="container">
+      <div class="section-head"><h2 id="how-h">How it works</h2></div>
+      <ol class="steps">
+        <li><span class="n">1</span><h3>Design it</h3><p>Pick a design, a product and a colour. Add your own line if you like.</p></li>
+        <li><span class="n">2</span><h3>We print it</h3><p>Your item is printed only after you order, by our print-on-demand partner.</p></li>
+        <li><span class="n">3</span><h3>It ships to you</h3><p>Delivered straight to your door. Tracking is sent by email.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="faq-h">
+    <div class="container narrow">
+      <div class="section-head"><h2 id="faq-h">Questions</h2></div>
+      <details><summary>Where do I pay?</summary><p>Checkout happens securely on our store partner’s site, not on American Car Saga, so we never see your card details.</p></details>
+      <details><summary>How long does delivery take?</summary><p>Items are made to order, so production plus shipping usually takes about one to two weeks. The exact estimate is shown at checkout.</p></details>
+      <details><summary>Can I return an item?</summary><p>If an item arrives damaged or misprinted we will replace it. Because everything is made just for you, other returns are limited. Full details are on the store’s policy page.</p></details>
+      <details><summary>Does the preview match the real product?</summary><p>The preview is an illustration. Real fabric, ink and colours can look slightly different on screen and in person.</p></details>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline define:vars={{ cfg }}>
+  (function () {
+    var stage = document.getElementById('stage'), mock = document.getElementById('mock');
+    var cap = document.getElementById('caption'), buy = document.getElementById('buy');
+    var form = document.querySelector('.controls');
+    var state = { design: form.design.value, product: form.product.value, color: form.color.value, text: '' };
+
+    function lum(hex) {
+      var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+      return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    }
+    function render() {
+      var c = cfg.colors[state.color], light = lum(c.hex) > 0.55;
+      stage.style.setProperty('--g', c.hex);
+      stage.style.setProperty('--ink', light ? '#1d1d20' : '#f4efe3');
+      stage.style.setProperty('--ink2', light ? '#9b2c2c' : '#e3b866');
+      mock.querySelectorAll('[data-p]').forEach(function (g) { g.style.display = g.dataset.p === state.product ? '' : 'none'; });
+      mock.querySelectorAll('.art').forEach(function (u) { u.setAttribute('href', '#d-' + state.design); });
+      mock.querySelectorAll('.custom').forEach(function (t) { t.textContent = state.text.toUpperCase(); });
+      var d = cfg.designs[state.design];
+      cap.textContent = d.name + ' · ' + cfg.products[state.product] + ' · ' + c.name + (state.text ? ' · “' + state.text + '”' : '');
+
+      var base = d.url || cfg.storeUrl;
+      if (base) {
+        var u = new URL(base, location.href);
+        u.searchParams.set('utm_source', 'americancarsaga'); u.searchParams.set('utm_medium', 'garage_gear'); u.searchParams.set('utm_campaign', state.design);
+        if (state.text) u.searchParams.set('custom_text', state.text);
+        buy.href = u.toString(); buy.removeAttribute('target');
+        buy.target = '_blank';
+        buy.textContent = 'Order this design →';
+      } else {
+        var body = 'Please notify me when Garage Gear opens.\n\nDesign: ' + d.name + '\nProduct: ' + cfg.products[state.product] + '\nColour: ' + c.name + (state.text ? '\nMy line: ' + state.text : '');
+        buy.href = 'mailto:' + cfg.email + '?subject=' + encodeURIComponent('Garage Gear: notify me') + '&body=' + encodeURIComponent(body);
+        buy.removeAttribute('target');
+        buy.textContent = 'Notify me when it opens →';
+      }
+      buy.dataset.product = d.name + ' / ' + cfg.products[state.product];
+    }
+    form.addEventListener('change', function (e) {
+      if (e.target.name in state) { state[e.target.name] = e.target.value; render();
+        window.acsTrack && acsTrack('pod_select', { option: e.target.name, value: e.target.value }); }
+    });
+    form.custom.addEventListener('input', function () { state.text = form.custom.value.trim(); render(); });
+    document.querySelectorAll('.try').forEach(function (b) {
+      b.addEventListener('click', function () {
+        form.design.value = b.dataset.design; state.design = b.dataset.design; render();
+        document.getElementById('studio').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.acsTrack && acsTrack('pod_select', { option: 'design', value: b.dataset.design, from: 'collection' });
+      });
+    });
+    render();
+  })();
+</script>
+
+<style>
+  .gg-hero { background: linear-gradient(180deg, var(--surface-2), var(--bg)); border-bottom: 1px solid var(--border); padding-bottom: 2rem; }
+  .gg-hero h1 { margin: .2rem 0 .5rem; }
+  .lead { max-width: 44rem; font-size: 1.15rem; color: var(--muted); font-family: var(--font-head); margin: 0; }
+  .studio-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(1.2rem, 3vw, 2.6rem); align-items: start; }
+  .stage { position: sticky; top: 1rem; background: radial-gradient(circle at 50% 35%, var(--surface), var(--surface-2)); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; box-shadow: var(--shadow); }
+  .stage svg { width: 100%; height: auto; }
+  .stage-caption { text-align: center; margin: .4rem 0 0; color: var(--muted); font-size: .9rem; }
+  .controls { display: grid; gap: 1.4rem; }
+  fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+  legend { font: 700 1.05rem var(--font-head); margin-bottom: .6rem; padding: 0; }
+  input[type='radio'] { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .designs { display: grid; grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); gap: .6rem; }
+  .design { display: flex; flex-direction: column; gap: .3rem; cursor: pointer; text-align: center; font-size: .82rem; font-weight: 600; }
+  .thumb { display: block; background: #f4efe3; border: 2px solid var(--border); border-radius: 10px; padding: .3rem; }
+  .thumb svg { width: 100%; height: auto; }
+  .design input:checked + .thumb { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .design input:focus-visible + .thumb, .pill input:focus-visible + span, .swatch input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .pills { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: .6rem; }
+  .pill span { display: flex; flex-direction: column; min-height: 56px; justify-content: center; padding: .55rem .8rem; border: 2px solid var(--border); border-radius: 10px; background: var(--surface); cursor: pointer; }
+  .pill small { color: var(--muted); font-size: .76rem; }
+  .pill input:checked + span { border-color: var(--primary); background: var(--surface-2); box-shadow: 0 0 0 1px var(--primary); }
+  .swatches { display: flex; flex-wrap: wrap; gap: .7rem; }
+  .swatch { display: flex; flex-direction: column; align-items: center; gap: .25rem; cursor: pointer; width: 4.2rem; font-size: .75rem; }
+  .swatch span { width: 2.8rem; height: 2.8rem; border-radius: 50%; border: 2px solid var(--border); box-shadow: inset 0 0 0 3px var(--surface); }
+  .swatch input:checked + span { border-color: var(--accent); box-shadow: inset 0 0 0 3px var(--surface), 0 0 0 2px var(--accent); }
+  .swatch em { font-style: normal; color: var(--muted); text-align: center; }
+  .personal label { font: 700 1.05rem var(--font-head); }
+  .personal small { font: 400 .8rem var(--font-body); color: var(--muted); }
+  .hint { color: var(--muted); font-size: .82rem; margin: .4rem 0 0; }
+  .buy .btn { width: 100%; min-height: 56px; font-size: 1.05rem; }
+  .ship { color: var(--muted); font-size: .85rem; margin: .6rem 0 0; text-align: center; }
+  .ship.soon { color: var(--accent); }
+  .coll-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+  .coll-art { aspect-ratio: 1 / 1; display: grid; place-items: center; }
+  .coll-svg { width: 62%; height: auto; }
+  .coll-body { padding: 1rem 1.2rem 1.3rem; display: grid; gap: .4rem; }
+  .coll-body h3 { margin: 0; font-size: 1.2rem; }
+  .coll-body p { margin: 0 0 .6rem; color: var(--muted); font-size: .93rem; }
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1.4rem; }
+  .steps li { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem; }
+  .steps h3 { margin: .6rem 0 .3rem; }
+  .steps p { margin: 0; color: var(--muted); }
+  .n { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 50%; background: var(--primary); color: var(--on-primary); font-weight: 700; }
+  .narrow { max-width: 52rem; }
+  details { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .2rem 1.1rem; margin-bottom: .7rem; }
+  summary { cursor: pointer; font-weight: 700; padding: .8rem 0; min-height: 48px; }
+  details p { color: var(--muted); margin: 0 0 1rem; }
+  @media (max-width: 900px) {
+    .studio-grid { display: block; }
+    .stage { position: sticky; top: 0; z-index: 5; padding: .5rem; margin-bottom: 1.2rem; }
+    .stage svg { max-height: 34vh; }
+    .stage-caption { font-size: .8rem; margin: .1rem 0 0; }
+  }
+</style>

@@ -15,6 +15,15 @@ export const SITE = {
   email: 'hello@americancarsaga.com',
   locale: 'en_US',
 
+  // ---------- Garage Gear (print-on-demand store) ----------
+  pod: {
+    // Link to your ShopBase / Printify / Etsy / Shopify store (or a collection page).
+    // Empty = the Buy button turns into an email "notify me" button.
+    storeUrl: '',
+    // Optional text shown under the product preview, e.g. 'Ships in 5–9 business days'
+    shippingNote: 'Made to order by our print partner and shipped directly to you.',
+  },
+
   // ---------- Traffic tracking ----------
   analytics: {
     // Google Analytics 4 Measurement ID, e.g. 'G-ABC123XYZ'. Empty = off.
@@ -78,6 +87,7 @@ export const NAV = [
   { href: '/category/guides', label: 'Tips' },
   { href: '/category/market', label: 'Values' },
   { href: '/videos', label: 'Videos' },
+  { href: '/garage-gear', label: 'Garage Gear' },
 ];
 
 export const getCategory = (slug: string) => CATEGORIES.find((c) => c.slug === slug);
