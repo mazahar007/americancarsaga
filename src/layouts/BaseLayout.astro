@@ -16,8 +16,11 @@ interface Props {
   /** Analytics grouping, e.g. the article category */
   contentGroup?: string;
   pageType?: string;
+  /** Hide the site header/footer (for pages with their own full-screen design) */
+  bare?: boolean;
+  themeColor?: string;
 }
-const { title, description = SITE.description, image, type = 'website', publishedTime, noindex = false, jsonLd, contentGroup, pageType } = Astro.props;
+const { title, description = SITE.description, image, type = 'website', publishedTime, noindex = false, jsonLd, contentGroup, pageType, bare = false, themeColor = '#1d3557' } = Astro.props;
 const fullTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image ?? '/og-default.svg', Astro.site);
@@ -31,7 +34,7 @@ const ogImage = new URL(image ?? '/og-default.svg', Astro.site);
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
-    <meta name="theme-color" content="#1d3557" />
+    <meta name="theme-color" content={themeColor} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -67,10 +70,10 @@ const ogImage = new URL(image ?? '/og-default.svg', Astro.site);
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <Header />
+    {!bare && <Header />}
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    {!bare && <Footer />}
   </body>
 </html>
