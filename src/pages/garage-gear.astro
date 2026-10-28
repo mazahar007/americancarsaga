@@ -42,6 +42,8 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'CollectionPage', na
           </ul>
         </div>
         <figure class="hero-card">
+          <div class="zoom" data-zoom="2.2" tabindex="0" aria-label="Hoodie preview. Hover, tap or press Enter to zoom.">
+          <span class="zoom-hint" aria-hidden="true"><span class="h-mouse">🔍 Hover to zoom</span><span class="h-touch">🔍 Tap to zoom</span></span>
           <svg viewBox="0 0 400 400" role="img" aria-label="Navy hoodie with the V8 Tachometer design">
             <defs><linearGradient id="hfold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16" /><stop offset="1" stop-color="#000" stop-opacity=".22" /></linearGradient></defs>
             <ellipse cx="200" cy="372" rx="130" ry="9" fill="#000" opacity=".1" />
@@ -52,6 +54,7 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'CollectionPage', na
             <path d="M135 72 L90 88 L35 205 L72 220 L105 168 L105 352 L295 352 L295 168 L328 220 L365 205 L310 88 L265 72 Q200 36 135 72 Z" fill="url(#hfold)" />
             <g style="--ink:#f4efe3;--ink2:#e3b866"><use href="#d-gauge" x="144" y="152" width="112" height="112" /></g>
           </svg>
+          </div>
           <figcaption>Shown: V8 Tachometer on a Navy hoodie</figcaption>
         </figure>
       </div>
@@ -63,6 +66,8 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'CollectionPage', na
       <div class="section-head"><h2 id="studio-h">Design yours</h2><span class="head-note">The preview updates as you choose</span></div>
       <div class="studio-grid">
         <div class="stage" id="stage" data-product="tee" style={`--g:${POD_COLORS[0].hex};--ink:#1d1d20;--ink2:#9b2c2c`}>
+            <div class="zoom" data-zoom="2.4" tabindex="0" aria-label="Product preview. Hover, tap or press Enter to zoom.">
+            <span class="zoom-hint" aria-hidden="true"><span class="h-mouse">🔍 Hover to zoom</span><span class="h-touch">🔍 Tap to zoom</span></span>
             <svg id="mock" viewBox="0 0 400 400" role="img" aria-label="Product preview">
               <defs>
                 <linearGradient id="cyl" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".3" /><stop offset=".3" stop-color="#fff" stop-opacity=".2" /><stop offset=".55" stop-color="#000" stop-opacity="0" /><stop offset="1" stop-color="#000" stop-opacity=".34" /></linearGradient>
@@ -108,6 +113,7 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'CollectionPage', na
                 <text x="200" y="326" text-anchor="middle" font-family="Georgia, serif" font-size="7" letter-spacing="3" fill="var(--ink)" opacity=".7">AMERICAN CAR SAGA</text>
               </g>
             </svg>
+            </div>
           <p class="stage-caption" id="caption" aria-live="polite">{first.name} · T-Shirt · {POD_COLORS[0].name}</p>
         </div>
 
@@ -165,7 +171,7 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'CollectionPage', na
       <div class="grid grid-3">
         {POD_DESIGNS.map((d, i) => (
           <article class="coll-card rv" style={`--a-l:${accentsLight[i % 6]};--a-d:${accentsDark[i % 6]};--d:${(i % 3) * 0.08}s`}>
-            <div class="coll-art"><svg viewBox="0 0 200 200" aria-hidden="true"><use href={`#d-${d.id}`} width="200" height="200" /></svg></div>
+            <div class="coll-art zoom" data-zoom="2" tabindex="0" aria-label={`${d.name} design. Hover, tap or press Enter to zoom.`}><span class="zoom-hint" aria-hidden="true"><span class="h-mouse">🔍 Hover to zoom</span><span class="h-touch">🔍 Tap to zoom</span></span><svg viewBox="0 0 200 200" aria-hidden="true"><use href={`#d-${d.id}`} width="200" height="200" /></svg></div>
             <div class="coll-body">
               <h3>{d.name}</h3>
               <p>{d.tagline}</p>
@@ -233,6 +239,40 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'CollectionPage', na
       entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
     }, { threshold: 0.12 });
     document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
+
+    // Zoom: hover with a mouse (follows the cursor), tap on touch screens (drag to look around), Enter on a keyboard
+    var zoomSeen = {};
+    document.querySelectorAll('[data-zoom]').forEach(function (z, idx) {
+      z.style.setProperty('--zs', z.dataset.zoom || '2.2');
+      var down = null;
+      function at(e) {
+        var r = z.getBoundingClientRect();
+        var x = Math.max(0, Math.min(100, (e.clientX - r.left) / r.width * 100)), y = Math.max(0, Math.min(100, (e.clientY - r.top) / r.height * 100));
+        z.style.setProperty('--zx', x.toFixed(1) + '%'); z.style.setProperty('--zy', y.toFixed(1) + '%');
+      }
+      function set(on) {
+        z.classList.toggle('on', on);
+        if (on && !zoomSeen[idx]) { zoomSeen[idx] = 1; window.acsTrack && acsTrack('pod_zoom', { item: z.getAttribute('aria-label').split('.')[0] }); }
+      }
+      z.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') { at(e); set(true); } });
+      z.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') set(false); });
+      z.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse' || z.classList.contains('on')) at(e); });
+      z.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') down = { x: e.clientX, y: e.clientY }; });
+      z.addEventListener('pointerup', function (e) {
+        if (e.pointerType === 'mouse' || !down) return;
+        var moved = Math.abs(e.clientX - down.x) + Math.abs(e.clientY - down.y); down = null;
+        if (moved < 10) { at(e); set(!z.classList.contains('on')); }
+      });
+      z.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); z.style.setProperty('--zx', '50%'); z.style.setProperty('--zy', '45%'); set(!z.classList.contains('on')); }
+        else if (e.key === 'Escape') set(false);
+      });
+    });
+    // Tapping anywhere else closes a zoom on touch screens
+    document.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'mouse') return;
+      document.querySelectorAll('[data-zoom].on').forEach(function (z) { if (!z.contains(e.target)) z.classList.remove('on'); });
+    });
 
     // Anatomy: the layers separate as the section scrolls into view
     var exp = document.getElementById('exp'), items = document.querySelectorAll('#alist li'), busy = 0;
@@ -306,6 +346,18 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'CollectionPage', na
   .n.big { width: 2.4rem; height: 2.4rem; font-size: 1rem; }
   .head-note { color: var(--muted); font-size: .9rem; }
   .narrow { max-width: 52rem; }
+
+  /* zoom */
+  .zoom { position: relative; overflow: hidden; border-radius: 8px; cursor: zoom-in; outline-offset: 3px; }
+  .zoom > svg { display: block; transform-origin: var(--zx, 50%) var(--zy, 50%); transition: transform .25s ease; }
+  .zoom.on { cursor: zoom-out; touch-action: none; }
+  .zoom.on > svg { transform: scale(var(--zs, 2.2)); }
+  .zoom-hint { position: absolute; right: .5rem; top: .5rem; z-index: 2; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 99px; padding: .2rem .65rem; font-size: .78rem; font-weight: 600; pointer-events: none; box-shadow: var(--shadow); transition: opacity .2s; }
+  .zoom.on .zoom-hint { opacity: 0; }
+  .h-touch { display: none; }
+  @media (hover: none) { .h-mouse { display: none; } .h-touch { display: inline; } }
+  .coll-art.zoom { border-radius: 0; }
+  .coll-art .zoom-hint { font-size: .72rem; }
 
   /* hero */
   .gg-hero { background: linear-gradient(180deg, var(--surface-2), var(--bg)); border-bottom: 1px solid var(--border); padding-bottom: 2.4rem; }
