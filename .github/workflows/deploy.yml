@@ -5,7 +5,8 @@
 #   Secrets:   FTP_SERVER  (e.g. ftp.americancarsaga.com)
 #              FTP_USERNAME
 #              FTP_PASSWORD
-#   Variables: SITE_URL        (e.g. https://www.americancarsaga.com)
+#   Variables: FTP_DEPLOY      true  (turns this workflow on)
+#              SITE_URL        (e.g. https://www.americancarsaga.com)
 #              FTP_SERVER_DIR  (optional, default: public_html/)
 name: Deploy to hosting
 
@@ -20,6 +21,8 @@ concurrency:
 
 jobs:
   deploy:
+    # Off unless you use FTP hosting: set the repo variable FTP_DEPLOY to true to turn it on.
+    if: ${{ vars.FTP_DEPLOY == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

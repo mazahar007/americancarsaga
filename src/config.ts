@@ -91,3 +91,22 @@ export const NAV = [
 ];
 
 export const getCategory = (slug: string) => CATEGORIES.find((c) => c.slug === slug);
+
+// ============================================================
+//  Hosting — detected automatically at build time
+//  Vercel: login + contact form run as Vercel functions in /api.
+//  Anywhere else (cPanel / PHP hosting): the PHP files in public/api.
+// ============================================================
+const env: Record<string, string | undefined> = (globalThis as any).process?.env ?? {};
+
+export const HOST = env.VERCEL ? 'vercel' : 'php';
+
+/** Final site address: SITE_URL env var > Vercel production address > SITE.url above */
+export const SITE_URL = (env.SITE_URL || (env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}` : SITE.url)).replace(/\/$/, '');
+
+export const ENDPOINTS = HOST === 'vercel'
+  ? { auth: 'api/auth', contact: '/api/contact' }
+  : { auth: 'api/auth.php', contact: '/api/contact.php' };
+
+/** Branch the /admin panel saves articles to: CMS_BRANCH env var > the branch Vercel deployed > main */
+export const CMS_BRANCH = env.CMS_BRANCH || env.VERCEL_GIT_COMMIT_REF || 'main';

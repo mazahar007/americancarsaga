@@ -94,6 +94,33 @@ Search Console আর Bing-এ নিজের সাইট যুক্ত ক�
 
 **ইউরোপের ভিজিটরদের জন্য:** এই এলাকার ভিজিটরদের জন্য কুকি ব্যবহারের অনুমতি নেওয়া আইনত জরুরি। AdSense চালু হলে AdSense → Privacy & messaging থেকে Google-এর নিজস্ব ফ্রি সম্মতি বার্তা (consent message) চালু করুন।
 
+## Vercel-এ সাইট চালানো (americancarsaga.vercel.app)
+Vercel PHP চালাতে পারে না। তাই সেখানে অ্যাডমিন লগইন আর Contact ফর্মের কাজ করে রিপোর `api/auth.js` আর `api/contact.js` (Vercel functions)। কোন হোস্টে বিল্ড হচ্ছে, সাইট নিজেই বুঝে নেয়: Vercel-এ এই দুটো ফাইল ব্যবহার হয়, অন্য হোস্টিংয়ে PHP ফাইল। সাইটের ঠিকানা (`*.vercel.app`) আর অ্যাডমিন প্যানেলের সেটিংসও Vercel থেকে আপনা-আপনি নেওয়া হয়।
+
+> ⚠️ **খরচ:** Vercel-এর ফ্রি (Hobby) প্ল্যান শুধু ব্যক্তিগত, আয়-বিহীন সাইটের জন্য। AdSense বা এফিলিয়েট চালু করলে Pro প্ল্যান লাগার কথা। সাইন আপের আগে vercel.com/pricing আর তাদের শর্তগুলো দেখে নিন।
+
+### ধাপগুলো
+1. **ব্রাঞ্চ ঠিক করা:** GitHub-এ রিপো → Settings → General → Default branch-এর নাম বদলে `main` করুন। এটা আগে করলে পরে কিছু বদলাতে হয় না।
+2. **সাইট লাইভ করা:** vercel.com-এ GitHub দিয়ে সাইন আপ করুন। তারপর **Add New → Project** → `americancarsaga` রিপোর পাশে **Import** চাপুন। Framework হিসেবে **Astro** নিজে থেকেই আসবে, প্রজেক্টের নাম `americancarsaga` রাখুন, তারপর **Deploy** চাপুন। ঠিকানা হবে `https://americancarsaga.vercel.app`। নামটা অন্য কেউ আগে নিয়ে থাকলে Vercel একটু আলাদা ঠিকানা দেবে।
+3. **অ্যাডমিন লগইন:** GitHub → Settings → Developer settings → OAuth Apps-এ গিয়ে আগের অ্যাপটা খুলুন, অথবা নতুন একটা বানান।
+   - Homepage URL: `https://americancarsaga.vercel.app`
+   - Authorization callback URL: `https://americancarsaga.vercel.app/api/auth`
+4. **Vercel-এ গোপন তথ্য রাখা:** Vercel → প্রজেক্ট → **Settings → Environment Variables**-এ এগুলো যোগ করুন:
+
+   | নাম | কী বসাবেন |
+   |---|---|
+   | `GITHUB_CLIENT_ID` | OAuth App-এর Client ID |
+   | `GITHUB_CLIENT_SECRET` | OAuth App-এর Client Secret |
+   | `RESEND_API_KEY` | resend.com থেকে নেওয়া API key (Contact ফর্মের ইমেইল পাঠানোর জন্য, ফ্রি প্ল্যান আছে) |
+   | `CONTACT_TO` | যে ইমেইলে মেসেজ আসবে |
+   | `CONTACT_FROM` | পাঠানোর ঠিকানা, Resend-এ যাচাই করা ডোমেইনের হতে হবে। যাচাইয়ের আগে খালি রাখলে Resend-এর টেস্ট ঠিকানা ব্যবহার হয়। |
+
+   যোগ করার পর **Deployments → সবচেয়ে নতুনটা → Redeploy** চাপুন।
+5. **Netlify বন্ধ করা:** Vercel-এ সব ঠিকমতো চললে Netlify-র সাইটটা মুছে দিন (Site configuration → Delete)। একই সাইটের দুটো কপি গুগলে থাকলে SEO-র ক্ষতি হয়।
+6. **নিজের ডোমেইন (পরে):** Vercel → Settings → Domains → ডোমেইন যোগ করুন। তারপর Environment Variables-এ `SITE_URL` = `https://www.আপনার-ডোমেইন.com` বসিয়ে Redeploy করুন, আর OAuth App-এর ঠিকানাগুলোও নতুন ডোমেইনে বদলে দিন।
+
+এরপর থেকে GitHub-এ যেকোনো পরিবর্তন হলে, `/admin` থেকে লেখা পাবলিশ করলেও, Vercel নিজে থেকেই এক–দুই মিনিটে সাইট আপডেট করে দেয়।
+
 ## নিজের হোস্টিংয়ে সাইট চালানো (cPanel)
 সাইটটা চলে সাধারণ HTML ফাইল দিয়ে। আলাদা করে লাগে শুধু দুটো ছোট PHP ফাইল: `api/auth.php` (অ্যাডমিন প্যানেলের লগইন) আর `api/contact.php` (Contact ফর্মের মেসেজ ইমেইলে পাঠানো)। তাই PHP চলে এমন যেকোনো সাধারণ হোস্টিংয়ে সাইট চলবে। কোনো ডাটাবেস লাগে না।
 
@@ -106,6 +133,7 @@ Search Console আর Bing-এ নিজের সাইট যুক্ত ক�
 4. **FTP-র তথ্য GitHub-এ রাখা:** cPanel → FTP Accounts থেকে সার্ভারের নাম, ইউজারনেম আর পাসওয়ার্ড নিন। তারপর GitHub রিপো → Settings → Secrets and variables → Actions-এ যান।
    - **Secrets** ট্যাবে যোগ করুন: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`
    - **Variables** ট্যাবে যোগ করুন: `SITE_URL` (যেমন `https://www.americancarsaga.com`)। সাইট `public_html` ছাড়া অন্য ফোল্ডারে রাখতে চাইলে `FTP_SERVER_DIR`-ও দিন।
+   - Variables-এ `FTP_DEPLOY` = `true` দিন (এটা না দিলে FTP আপলোড বন্ধ থাকে, যাতে Vercel ব্যবহার করলে অকারণে এরর না আসে)।
    - এরপর থেকে `main`-এ যেকোনো পরিবর্তন হলে সাইট নিজে থেকেই আপলোড হবে। হাতে চালাতে চাইলে: Actions → Deploy to hosting → Run workflow।
 5. **অ্যাডমিন লগইনের জন্য GitHub OAuth App:** GitHub → Settings → Developer settings → OAuth Apps → New OAuth App খুলুন।
    - Homepage URL: `https://www.আপনার-ডোমেইন.com`
